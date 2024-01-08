@@ -5,6 +5,8 @@ export const LoginPage: React.FC = () => {
     return (
         <>
             <h1>這是登入頁面</h1>
+            <h1>這是登入頁面</h1>
+            <h1>這是登入頁面</h1>
             <Link to="/">回到首頁</Link>
         </>
     )
