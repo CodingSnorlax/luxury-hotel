@@ -20,10 +20,10 @@ export const NavbarComponent: React.FC = () => {
           {/* md 以上出現 */}
           <ul className='d-flex align-items-center d-none d-md-flex list-unstyled'>
             <li className='me-3'>
-              <Link className='text-light' to="/">客房旅宿</Link>
+              <Link className='text-light text-decoration-none' to="/">客房旅宿</Link>
             </li>
             <li className='me-3'>
-              <Link className='text-light' to="/">會員登入</Link>
+              <Link className='text-light text-decoration-none' to="/">會員登入</Link>
             </li>
             <li className='me-3'>
               <button className='btn btn-primary text-light'>立即訂房</button>
