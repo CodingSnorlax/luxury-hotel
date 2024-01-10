@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+// import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import { HomePage } from './views/HomePage/HomePage'
 import { LoginPage } from './views/LoginPage/LoginPage'
 import { NotFoundPage } from './views/NotFoundPage/NotFoundPage'
