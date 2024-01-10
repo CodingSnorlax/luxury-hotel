@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import useAppleStore from "../../store/appleStore";
 
 export const HomePage: React.FC = () => {
   const [imgUrl, setImgUrl] = useState("");
+
+  const price = useAppleStore((state) => state.price);
+  const amount = useAppleStore((state) => state.amount);
 
   useEffect(() => {
     axios
@@ -27,6 +31,7 @@ export const HomePage: React.FC = () => {
       <h1>這是首頁</h1>
       <h1>這是首頁</h1>
       <h1>這是首頁</h1>
+      <h1>我在首頁也可以拿到蘋果的價格:{price} 跟蘋果的數量: {amount} </h1>
       <img src={imgUrl} />
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus,
