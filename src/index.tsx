@@ -1,13 +1,14 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { HashRouter } from 'react-router-dom'
-import { App } from './App.tsx'
-import './assets/style/main.scss'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { HashRouter } from "react-router-dom";
+import { App } from "./App.tsx";
+import "bootstrap";
+import "./assets/style/main.scss";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <HashRouter>
       <App />
     </HashRouter>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
