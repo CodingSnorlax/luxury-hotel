@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+import { useState, useRef, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { HomePage } from "./views/HomePage/HomePage";
 import { LoginPage } from "./views/LoginPage/LoginPage";
@@ -7,14 +7,26 @@ import { NavbarComponent } from "./components/NavbarComponent";
 import { FooterComponent } from "./components/FooterComponent";
 
 export const App: React.FC = () => {
+  const [navbarMargin, setNavbarMargin] = useState({
+    marginTop: "",
+  });
+  const navbarRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setNavbarMargin({
+      marginTop: `${navbarRef.current?.clientHeight}px`,
+    });
+  }, [navbarRef]);
   return (
     <>
       <div className="App">
-        <NavbarComponent />
+        <NavbarComponent ref={navbarRef} />
         {/* 註冊路由表 */}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="login" element={<LoginPage />} />
+          <Route
+            path="login"
+            element={<LoginPage navbarMargin={navbarMargin} />}
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterComponent />

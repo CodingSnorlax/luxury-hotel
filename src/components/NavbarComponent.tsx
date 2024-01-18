@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import LogoImg from "../assets/img/logoWhite.svg";
 import { Link } from "react-router-dom";
 import useAppleStore from "../store/appleStore";
 
-export const NavbarComponent: React.FC = () => {
+export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const handleToggleOffcanvas = () => setShowOffcanvas(!showOffcanvas);
 
@@ -11,7 +11,7 @@ export const NavbarComponent: React.FC = () => {
   const amount = useAppleStore((state) => state.amount);
 
   return (
-    <nav className="navbar bg-dark px-20 py-6 fixed-top">
+    <nav className="navbar bg-dark px-20 py-6 fixed-top" ref={ref}>
       <div className="container-fluid justify-content-between">
         <Link to="/">
           <img src={LogoImg} alt="享樂酒店" />
@@ -86,4 +86,4 @@ export const NavbarComponent: React.FC = () => {
       </div>
     </nav>
   );
-};
+});
