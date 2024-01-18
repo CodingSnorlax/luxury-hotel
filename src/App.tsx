@@ -20,14 +20,15 @@ export const App: React.FC = () => {
     <>
       <div className="App">
         <NavbarComponent ref={navbarRef} />
-        <div style={navbarMargin}>
-          {/* 註冊路由表 */}
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </div>
+        {/* 註冊路由表 */}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="login"
+            element={<LoginPage navbarMargin={navbarMargin} />}
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
         <FooterComponent />
       </div>
     </>
