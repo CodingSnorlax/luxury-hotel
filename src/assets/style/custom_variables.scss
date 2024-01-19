@@ -678,7 +678,7 @@ $font-sizes: (
 $headings-margin-bottom:      0; //$spacer * .5 !default;
 $headings-font-family:        null !default;
 $headings-font-style:         null !default;
-$headings-font-weight:        500 !default;
+$headings-font-weight:        $font-weight-bold; //500 !default;
 $headings-line-height:        1.2 !default;
 $headings-color:              inherit !default;
 // scss-docs-end headings-variables
@@ -695,7 +695,7 @@ $display-font-sizes: (
 
 $display-font-family: null !default;
 $display-font-style:  null !default;
-$display-font-weight: 300 !default;
+$display-font-weight: $font-weight-bold; //300 !default;
 $display-line-height: $headings-line-height !default;
 // scss-docs-end display-headings
 
