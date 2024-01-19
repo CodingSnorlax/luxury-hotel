@@ -1,4 +1,5 @@
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import LogoImg from "../assets/img/logoWhite.svg";
 import { Link } from "react-router-dom";
 import useAppleStore from "../store/appleStore";
@@ -10,8 +11,23 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const price = useAppleStore((state) => state.price);
   const amount = useAppleStore((state) => state.amount);
 
+  // 設定 Navbar 背景透明
+  const [isTransparent, setIsTransparent] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  useEffect(() => {
+    if (currentPath === "/roomList") {
+      setIsTransparent(true);
+    }
+  }, [currentPath]);
+
   return (
-    <nav className="navbar bg-dark px-20 py-6 fixed-top" ref={ref}>
+    <nav
+      className={`navbar ${
+        isTransparent ? "bg-transparent" : "bg-dark"
+      } px-20 py-6 fixed-top`}
+      ref={ref}
+    >
       <div className="container-fluid justify-content-between">
         <Link to="/">
           <img src={LogoImg} alt="享樂酒店" />
