@@ -13,19 +13,37 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
 
   // 設定 Navbar 背景透明
   const [isTransparent, setIsTransparent] = useState(false);
+  const [navbarOpacity, setNavbarOpacity] = useState(0);
   const location = useLocation();
   const currentPath = location.pathname;
   useEffect(() => {
+    // 需要透明的路由加在這裏
     if (currentPath === "/roomList") {
       setIsTransparent(true);
+    } else {
+      setIsTransparent(false);
     }
   }, [currentPath]);
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const newOpacity = Math.min(currentScrollY / 300, 1);
+      setNavbarOpacity(newOpacity);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <nav
-      className={`navbar ${
-        isTransparent ? "bg-transparent" : "bg-dark"
-      } px-20 py-6 fixed-top`}
+      className={`navbar px-20 py-6 fixed-top`}
+      style={{
+        backgroundColor: isTransparent
+          ? `rgba(0, 0, 0, ${navbarOpacity})`
+          : "#000",
+      }}
       ref={ref}
     >
       <div className="container-fluid justify-content-between">
