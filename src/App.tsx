@@ -4,8 +4,8 @@ import { HomePage } from "./views/HomePage/HomePage";
 import { LoginPage } from "./views/LoginPage/LoginPage";
 import { UserPage } from "./views/UserPage/UserPage";
 import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage";
-import { NavbarComponent } from "./components/NavbarComponent";
-import { FooterComponent } from "./components/FooterComponent";
+import { NavbarComponent } from "./components/Layout/NavbarComponent";
+import { FooterComponent } from "./components/Layout/FooterComponent";
 
 export const App: React.FC = () => {
   const [navbarMargin, setNavbarMargin] = useState({
