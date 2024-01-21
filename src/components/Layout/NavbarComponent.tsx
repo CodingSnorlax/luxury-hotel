@@ -63,12 +63,18 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
           {/* md 以上出現 */}
           <ul className="d-flex align-items-center d-none d-md-flex list-unstyled">
             <li className="me-3">
-              <Link className="px-4 text-light text-decoration-none" to="/">
+              <Link
+                className="px-4 text-light text-decoration-none"
+                to="/roomTypes"
+              >
                 客房旅宿
               </Link>
             </li>
             <li className="me-3">
-              <Link className="px-4 text-light text-decoration-none" to="/">
+              <Link
+                className="px-4 text-light text-decoration-none"
+                to="/login"
+              >
                 會員登入
               </Link>
             </li>
@@ -97,18 +103,20 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="offcanvas-body">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
-                  <a
-                    className="nav-link active text-light text-center"
-                    aria-current="page"
-                    href="#"
+                  <Link
+                    className="nav-link active text-light text-center text-decoration-none"
+                    to="/roomTypes"
                   >
                     客房旅宿
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link text-light text-center" href="#">
+                  <Link
+                    className="nav-link active text-light text-center text-decoration-none"
+                    to="/login"
+                  >
                     會員登入
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <button className="btn btn-primary w-100">立即訂房</button>

@@ -7,7 +7,10 @@ export const LoginPage: React.FC = () => {
             <h1>這是登入頁面</h1>
             <h1>這是登入頁面</h1>
             <h1>這是登入頁面</h1>
-            <Link to="/">回到首頁</Link>
+            <h1>這是登入頁面</h1>
+            <h1>這是登入頁面</h1>
+            <h1>這是登入頁面</h1>
+            <p>沒有會員嗎？ <Link className="text-primary" to="/signUp">前往註冊</Link></p>
         </>
     )
 }
