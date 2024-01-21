@@ -1,7 +1,35 @@
 import React from "react";
 import arrowLeft from "../../assets/icon/arrowLeft.svg";
+import sizeIcon from "../../assets/icon/size.svg";
+import carIcon from "../../assets/icon/car.svg";
+import personIcon from "../../assets/icon/person.svg";
+import { CheckListComponent } from "../../components/CheckListComponent";
 
 export const ReservationPage: React.FC = () => {
+  const roomSettingData = ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"];
+  const roomFacilitiyData = [
+    "平面電視",
+    "吹風機",
+    "冰箱",
+    "熱水壺",
+    "檯燈",
+    "衣櫃",
+    "除濕機",
+    "浴缸",
+    "書桌",
+    "音響",
+  ];
+  const sparePartsData = [
+    "衛生紙",
+    "拖鞋",
+    "沐浴用品",
+    "清潔用品",
+    "刮鬍刀",
+    "吊衣架",
+    "浴巾",
+    "刷牙用品",
+  ];
+
   return (
     <div className="bg-primary-40">
       <div className="container mt-30 py-12">
@@ -13,7 +41,7 @@ export const ReservationPage: React.FC = () => {
         </div>
         <main>
           <div className="row mb-8">
-            <div className="col-6">
+            <div className="col-md-8">
               {/* 訂房資訊 */}
               <ul className="list-unstyled mb-16 pb-8 border-bottom border-secondary">
                 <h4 className="mb-8">訂房資訊</h4>
@@ -115,6 +143,86 @@ export const ReservationPage: React.FC = () => {
                   />
                 </li>
               </ul>
+              {/* 房間資訊 */}
+              <ul className="list-unstyled mb-0 mb-md-16 pb-8 border-secondary">
+                <h4 className="mb-12">房間資訊</h4>
+                {/* 房型基本資訊 */}
+                <li className="mb-12">
+                  <div className="border-5 border-start border-primary mb-8">
+                    <h5 className="ms-2">房型基本資訊</h5>
+                  </div>
+                  <ul className="list-unstyled d-flex row">
+                    <li className="room-type-box me-4 rounded bg-light p-4">
+                      <img src={sizeIcon} className="mb-2" alt="" />
+                      <br />
+                      <span>24坪</span>
+                    </li>
+                    <li className="room-type-box me-4 rounded bg-light p-4">
+                      <img src={carIcon} className="mb-2" alt="" />
+                      <br />
+                      <span>1張大床</span>
+                    </li>
+                    <li className="room-type-box rounded bg-light p-4">
+                      <img src={personIcon} className="mb-2" alt="" />
+                      <br />
+                      <span>2-4人</span>
+                    </li>
+                  </ul>
+                </li>
+
+                {/* 房間格局 */}
+                <li className="mb-12">
+                  <div className="border-5 border-start border-primary mb-8">
+                    <h5 className="ms-2">房間格局</h5>
+                  </div>
+                  <CheckListComponent checkListArr={roomSettingData} />
+                </li>
+
+                {/* 房內設備 */}
+                <li className="mb-12">
+                  <div className="border-5 border-start border-primary mb-8">
+                    <h5 className="ms-2">房內設備</h5>
+                  </div>
+                  <CheckListComponent checkListArr={roomFacilitiyData} />
+                </li>
+
+                {/* 備品提供 */}
+                <li className="mb-12">
+                  <div className="border-5 border-start border-primary mb-8">
+                    <h5 className="ms-2">備品提供</h5>
+                  </div>
+                  <CheckListComponent checkListArr={sparePartsData} />
+                </li>
+              </ul>
+            </div>
+            {/* 卡片區 */}
+            <div className="col-md-4">
+              <div className="card p-10 ms-0 ms-md-8 sticky-top">
+                <img
+                  src="https://images.unsplash.com/photo-1560448205-4d9b3e6bb6db?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  className="card-img-top mb-8"
+                />
+                <div className="card-bod p-0">
+                  <h4 className="card-title mb-8">價格詳情</h4>
+                  <ul className="list-unstyled mb-12">
+                    <li className="d-flex justify-content-between">
+                      <span> NT$ 10,000 x 2 晚</span>
+                      <span>NT$ 20,000</span>
+                    </li>
+                    <li className="d-flex justify-content-between pb-4  border-bottom border-gray">
+                      <span>住宿折扣</span>
+                      <span className="text-primary">-NT$ 1,000</span>
+                    </li>
+                    <li className="mt-4">
+                    <span>總價</span>
+                      <span className="">NT$ 19,000</span>
+                    </li>
+                  </ul>
+                  <button className="btn btn-primary text-light w-100 mb-0">
+                    確認訂房
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </main>
