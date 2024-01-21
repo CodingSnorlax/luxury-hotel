@@ -9,6 +9,8 @@ import { NavbarComponent } from "./components/Layout/NavbarComponent";
 import { FooterComponent } from "./components/Layout/FooterComponent";
 import { RoomTypesPage } from "./views/RoomTypesPage/RoomTypesPage";
 import { RoomDetailPage } from "./views/RoomDetailPage/RoomDetailPage";
+import { ReservationPage } from "./views/ReservationPage/ReservationPage";
+import { ReservationSuccessPage } from "./views/ReservationSuccessPage/ReservationSuccessPage";
 
 export const App: React.FC = () => {
   const [navbarMargin, setNavbarMargin] = useState({
@@ -35,6 +37,8 @@ export const App: React.FC = () => {
           <Route path="/user" element={<UserPage />} />
           <Route path="/roomTypes" element={<RoomTypesPage />} />
           <Route path="/roomDetail/:roomTypeId" element={<RoomDetailPage />} />
+          <Route path="/reservation" element={<ReservationPage />} />
+          <Route path="/success" element={<ReservationSuccessPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterComponent />
