@@ -47,7 +47,7 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
         }}
         ref={ref}
       >
-        <div className="container-fluid justify-content-between">
+        <div className="container justify-content-between">
           <Link to="/">
             <img src={LogoImg} alt="享樂酒店" />
           </Link>
@@ -63,12 +63,12 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
           {/* md 以上出現 */}
           <ul className="d-flex align-items-center d-none d-md-flex list-unstyled">
             <li className="me-3">
-              <Link className="text-light text-decoration-none" to="/">
+              <Link className="px-4 text-light text-decoration-none" to="/">
                 客房旅宿
               </Link>
             </li>
             <li className="me-3">
-              <Link className="text-light text-decoration-none" to="/">
+              <Link className="px-4 text-light text-decoration-none" to="/">
                 會員登入
               </Link>
             </li>
