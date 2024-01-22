@@ -18,7 +18,7 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const currentPath = location.pathname;
   useEffect(() => {
     // 需要透明的路由加在這裏
-    if (currentPath === "/roomList") {
+    if (currentPath === "/roomType") {
       setIsTransparent(true);
     } else {
       setIsTransparent(false);
@@ -26,11 +26,13 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   }, [currentPath]);
   useEffect(() => {
     const handleScroll = () => {
+      console.log(window.scrollY);
+
       const currentScrollY = window.scrollY;
       const newOpacity = Math.min(currentScrollY / 300, 1);
       setNavbarOpacity(newOpacity);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: false });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };

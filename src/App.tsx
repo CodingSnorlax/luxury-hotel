@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { HomePage } from "./views/HomePage/HomePage";
 import { LoginPage } from "./views/LoginPage/LoginPage";
+import { SignUpPage } from "./views/SignUpPage/SignUpPage";
+import { RoomTypePage } from "./views/RoomTypePage/RoomTypePage";
 import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage";
 import { NavbarComponent } from "./components/NavbarComponent";
 import { FooterComponent } from "./components/FooterComponent";
@@ -24,9 +26,14 @@ export const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
-            path="login"
+            path="/login"
             element={<LoginPage navbarMargin={navbarMargin} />}
           />
+          <Route
+            path="/signUp"
+            element={<SignUpPage navbarMargin={navbarMargin} />}
+          />
+          <Route path="/roomType" element={<RoomTypePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterComponent />
