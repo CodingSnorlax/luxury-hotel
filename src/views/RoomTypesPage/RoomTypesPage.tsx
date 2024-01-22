@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./RoomTypePage.scss";
+import "./RoomTypesPage.scss";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -52,7 +52,7 @@ interface Room {
   updatedAt: string;
 }
 
-export const RoomTypePage = () => {
+export const RoomTypesPage = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const getRooms = async () => {
     try {
