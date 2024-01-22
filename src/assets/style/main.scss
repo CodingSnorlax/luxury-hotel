@@ -6,14 +6,19 @@ body {
     font-family: 'Noto Serif TC', serif, sans-serif;
 }
 
-.footer {
-    padding: 80px 312px 120px;
-}
-
 .btn-primary:hover {
     background-color: #7B6651;
 }
 
 p {
     margin-bottom: 0;
+}
+
+.bg-primary-40 {
+    background-color: #F1EAE4;
+}
+
+.room-type-box {
+    width: 97px;
+    height: 97px;
 }

@@ -3,10 +3,14 @@ import { Routes, Route } from "react-router-dom";
 import { HomePage } from "./views/HomePage/HomePage";
 import { LoginPage } from "./views/LoginPage/LoginPage";
 import { SignUpPage } from "./views/SignUpPage/SignUpPage";
-import { RoomTypesPage } from "./views/RoomTypesPage/RoomTypesPage";
+import { UserPage } from "./views/UserPage/UserPage";
 import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage";
-import { NavbarComponent } from "./components/NavbarComponent";
-import { FooterComponent } from "./components/FooterComponent";
+import { NavbarComponent } from "./components/Layout/NavbarComponent";
+import { FooterComponent } from "./components/Layout/FooterComponent";
+import { RoomTypesPage } from "./views/RoomTypesPage/RoomTypesPage";
+import { RoomDetailPage } from "./views/RoomDetailPage/RoomDetailPage";
+import { ReservationPage } from "./views/ReservationPage/ReservationPage";
+import { ReservationSuccessPage } from "./views/ReservationSuccessPage/ReservationSuccessPage";
 
 export const App: React.FC = () => {
   const [navbarMargin, setNavbarMargin] = useState({
@@ -34,6 +38,11 @@ export const App: React.FC = () => {
             element={<SignUpPage navbarMargin={navbarMargin} />}
           />
           <Route path="/roomTypes" element={<RoomTypesPage />} />
+          <Route path="/user" element={<UserPage />} />
+          <Route path="/roomTypes" element={<RoomTypesPage />} />
+          <Route path="/roomDetail/:roomTypeId" element={<RoomDetailPage />} />
+          <Route path="/reservation" element={<ReservationPage />} />
+          <Route path="/success" element={<ReservationSuccessPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterComponent />
