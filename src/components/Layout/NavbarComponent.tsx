@@ -18,7 +18,7 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const currentPath = location.pathname;
   useEffect(() => {
     // 需要透明的路由加在這裏
-    if (currentPath === "/roomList") {
+    if (currentPath === "/roomTypes") {
       setIsTransparent(true);
     } else {
       setIsTransparent(false);
