@@ -1,11 +1,9 @@
 import "./LoginPage.scss";
 import { Link } from "react-router-dom";
 interface Props {
-  navbarMargin: {
-    marginTop: string;
-  };
+  navbarHeight: number;
 }
-export const LoginPage = ({ navbarMargin }: Props) => {
+export const LoginPage = ({ navbarHeight }: Props) => {
   return (
     <div className="row g-0">
       <div className="col-6">
@@ -15,7 +13,10 @@ export const LoginPage = ({ navbarMargin }: Props) => {
           alt=""
         />
       </div>
-      <div className="col-6 bg-dark text-white" style={navbarMargin}>
+      <div
+        className="col-6 bg-dark text-white"
+        style={{ paddingTop: `${navbarHeight}px` }}
+      >
         <div className="bg-line h-100 d-flex justify-content-center align-items-center">
           <div className="content-wrap">
             <p className="text-primary fw-bold mb-2">享樂酒店，誠摯歡迎</p>

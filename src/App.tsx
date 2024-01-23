@@ -13,14 +13,10 @@ import { ReservationPage } from "./views/ReservationPage/ReservationPage";
 import { ReservationSuccessPage } from "./views/ReservationSuccessPage/ReservationSuccessPage";
 
 export const App: React.FC = () => {
-  const [navbarMargin, setNavbarMargin] = useState({
-    marginTop: "",
-  });
+  const [navbarHeight, setnavbarHeight] = useState(0);
   const navbarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    setNavbarMargin({
-      marginTop: `${navbarRef.current?.clientHeight}px`,
-    });
+    setnavbarHeight(navbarRef.current?.clientHeight as number);
   }, [navbarRef]);
   return (
     <>
@@ -31,16 +27,18 @@ export const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route
             path="/login"
-            element={<LoginPage navbarMargin={navbarMargin} />}
+            element={<LoginPage navbarHeight={navbarHeight} />}
           />
           <Route
             path="/signUp"
-            element={<SignUpPage navbarMargin={navbarMargin} />}
+            element={<SignUpPage navbarHeight={navbarHeight} />}
           />
-          <Route path="/roomTypes" element={<RoomTypesPage />} />
           <Route path="/user" element={<UserPage />} />
           <Route path="/roomTypes" element={<RoomTypesPage />} />
-          <Route path="/roomDetail/:roomTypeId" element={<RoomDetailPage />} />
+          <Route
+            path="/roomDetail/:roomTypeId"
+            element={<RoomDetailPage navbarHeight={navbarHeight} />}
+          />
           <Route path="/reservation" element={<ReservationPage />} />
           <Route path="/success" element={<ReservationSuccessPage />} />
           <Route path="*" element={<NotFoundPage />} />

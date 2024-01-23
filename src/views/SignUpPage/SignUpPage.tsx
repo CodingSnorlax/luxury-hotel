@@ -2,11 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./SignUpPage.scss";
 interface Props {
-  navbarMargin: {
-    marginTop: string;
-  };
+  navbarHeight: number;
 }
-export const SignUpPage = ({ navbarMargin }: Props) => {
+export const SignUpPage = ({ navbarHeight }: Props) => {
   // 目前進度
   const [progressNum, setProgressNum] = useState(1);
 
@@ -42,7 +40,10 @@ export const SignUpPage = ({ navbarMargin }: Props) => {
           alt=""
         />
       </div>
-      <div className="col-6 bg-dark text-white" style={navbarMargin}>
+      <div
+        className="col-6 bg-dark text-white"
+        style={{ paddingTop: `${navbarHeight}px` }}
+      >
         <div className="bg-line h-100 d-flex justify-content-center align-items-center">
           <div className="content-wrap">
             <p className="text-primary fw-bold mb-2">享樂酒店，誠摯歡迎</p>
