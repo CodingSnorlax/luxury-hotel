@@ -6,51 +6,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
-import { Icon as Iconify } from "@iconify/react";
 import Icon from "@mdi/react";
-import {
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiArrowRight,
-  mdiBedKing,
-  mdiAccount,
-} from "@mdi/js";
-
-interface Room {
-  _id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  imageUrlList: string[];
-  areaInfo: string;
-  bedInfo: {
-    type: string;
-    quantity: number;
-  };
-  maxPeople: number;
-  minPeople: number;
-  price: number;
-  layoutInfo: [
-    {
-      title: string;
-      isProvide: boolean;
-    }
-  ];
-  facilityInfo: [
-    {
-      title: string;
-      isProvide: boolean;
-    }
-  ];
-  amenityInfo: [
-    {
-      title: string;
-      isProvide: boolean;
-    }
-  ];
-  createdAt: string;
-  updatedAt: string;
-}
+import { useNavigate } from "react-router-dom";
+import { mdiChevronLeft, mdiChevronRight, mdiArrowRight } from "@mdi/js";
+import { Room } from "../../interface/Room";
+import { formatNumberWithCommas } from "../../units/format";
+import RoomInfo from "../../components/RoomInfo/RoomInfo";
 
 export const RoomTypesPage = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
@@ -62,9 +23,12 @@ export const RoomTypesPage = () => {
       setRoomList(res.data.result);
     } catch (err) {}
   };
-  const formatNumberWithCommas = (number: number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  const navigate = useNavigate();
+  const goDetail = (id: string) => {
+    navigate(`/roomDetail/${id}`);
   };
+
   useEffect(() => {
     getRooms();
   }, []);
@@ -133,39 +97,22 @@ export const RoomTypesPage = () => {
                         <div className="card-desc-wrap border-bottom pb-6 pb-lg-10 mb-10">
                           <h3 className="display-6 mb-2">{item.name}</h3>
                           <p className="mb-6 mb-lg-10">{item.description}</p>
-                          <div className="d-flex">
-                            <div className="feature d-flex flex-column justify-content-center px-4 me-4 border rounded-2">
-                              <Iconify
-                                icon="fluent:slide-size-24-filled"
-                                className="fs-4 text-primary"
-                              />
-                              <p className="fw-bold">{item.areaInfo}</p>
-                            </div>
-                            <div className="feature d-flex flex-column justify-content-center px-4 me-4 border rounded-2">
-                              <Icon
-                                path={mdiBedKing}
-                                size={1}
-                                className="text-primary"
-                              />
-                              <p className="fw-bold">{item.bedInfo.type}</p>
-                            </div>
-                            <div className="feature d-flex flex-column justify-content-center px-4 me-4 border rounded-2">
-                              <Icon
-                                path={mdiAccount}
-                                size={1}
-                                className="text-primary"
-                              />
-                              <p className="fw-bold">
-                                {item.minPeople}-{item.maxPeople} 人
-                              </p>
-                            </div>
-                          </div>
+                          <RoomInfo
+                            areaInfo={item.areaInfo}
+                            bedInfoType={item.bedInfo.type}
+                            minPeople={item.minPeople}
+                            maxPeople={item.maxPeople}
+                            border={true}
+                          />
                         </div>
                         <div className="d-flex justify-content-between">
                           <h4 className="fw-bold text-primary">
                             NT$ {formatNumberWithCommas(item.price)}
                           </h4>
-                          <button className="btn text-primary p-0 ps-16">
+                          <button
+                            className="btn text-primary p-0 ps-16"
+                            onClick={() => goDetail(item._id)}
+                          >
                             <Icon path={mdiArrowRight} size={1} />
                           </button>
                         </div>
