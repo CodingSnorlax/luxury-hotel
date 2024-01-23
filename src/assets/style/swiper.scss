@@ -8,14 +8,17 @@
         content: "" !important;
     }
 }
-.swiper-pagination-bullet {
-    width: 32px !important;
-    height: 4px !important;
-    border-radius: 3px !important;
-    transform: scale(1) !important;
-    background-color: #F1EAE4 !important;
-    &-active {
-        width: 60px !important;
-        background-color: #BF9D7D !important;
+.swiper-pagination {
+    bottom: 18px !important;
+    .swiper-pagination-bullet {
+        width: 32px !important;
+        height: 4px !important;
+        border-radius: 3px !important;
+        transform: scale(1) !important;
+        background-color: #F1EAE4 !important;
+        &-active {
+            width: 60px !important;
+            background-color: #BF9D7D !important;
+        }
     }
 }
