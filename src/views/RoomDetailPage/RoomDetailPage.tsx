@@ -19,6 +19,8 @@ import dayjs from "dayjs";
 import Icon from "@mdi/react";
 import { mdiClose } from "@mdi/js";
 import { Modal } from "bootstrap";
+//取訂房資訊
+import useReservationStore from "../../store/ReservationStore";
 
 interface Props {
   navbarHeight: number;
@@ -77,6 +79,36 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
 
   // 人數
   const [peopleCount, setPeopleCount] = useState(0);
+
+  // 取得本頁面所有資料，加入狀態管理層
+  const store = useReservationStore((state) => state);
+
+  const handleSubmit = () => {
+    //取使用者目前登入情形
+    //const [userLoginState, setUserLoginState] = useState(false);
+
+    if (true) {
+      //假設已登入 就跳轉到下一頁
+      navigate(`/reservation/${room?._id}`);
+      //帶資料回去
+      store.setReservationData({
+        userId: "karen", //temp
+        bookingInfo: {
+          roomTypeId: pageParams.roomTypeId,
+          quantity: 2,
+          arrivalDate: dateRange[0].startDate.toLocaleString(),
+          departureDate: dateRange[0].endDate.toLocaleString(),
+        },
+        guestCount: peopleCount,
+        totalPrice: room?.price ?? 0,
+        notes: "temp",
+      });
+    } else {
+      //未登入就先回去登入頁
+      alert("請先登入再進行預約訂房！");
+      navigate(`/login`);
+    }
+  };
 
   useEffect(() => {
     const modal = new Modal("#datePickerModal");
@@ -383,7 +415,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
                       <button
                         className="btn btn-primary text-light fw-bold w-100"
                         disabled={nights === 0 || peopleCount <= 0}
-                        onClick={() => navigate(`/reservation/${room._id}`)}
+                        onClick={handleSubmit}
                       >
                         立即預訂
                       </button>
@@ -407,7 +439,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
                   </div>
                   <button
                     className="btn btn-primary text-white fw-bold"
-                    onClick={() => navigate(`/reservation/${room._id}`)}
+                    onClick={handleSubmit}
                   >
                     立即預定
                   </button>

@@ -417,5 +417,8 @@ export const cityListByCounty = (county: string) => {
     (value) => value.city
   );
 };
+export const zipCodeByCountryAndCity = (county: string, city: string) => {
+  return (ZipCodeMap.find(item => item.county === county && item.city === city))?.zipcode
+}
 
 export default ZipCodeMap;

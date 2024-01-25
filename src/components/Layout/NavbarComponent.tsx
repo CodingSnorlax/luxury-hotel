@@ -2,14 +2,14 @@ import { useState, forwardRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import LogoImg from "../../assets/img/logoWhite.svg";
 import { Link } from "react-router-dom";
-import useAppleStore from "../../store/appleStore";
+// import userLoginStore from "../../store/UserLoginStore";
 
 export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const handleToggleOffcanvas = () => setShowOffcanvas(!showOffcanvas);
 
-  const price = useAppleStore((state) => state.price);
-  const amount = useAppleStore((state) => state.amount);
+  // const userId = userLoginStore((state) => state.userId);
+  // const token = userLoginStore((state) => state.token);
 
   // 設定 Navbar 背景透明
   const [isTransparent, setIsTransparent] = useState(false);

@@ -4,9 +4,12 @@ import { CheckListComponent } from "../../components/CheckListComponent";
 import axios from "axios";
 // import RoomInfo from "../../components/RoomInfo/RoomInfo";
 import { useParams } from "react-router-dom";
+import useReservationStore from '../../store/ReservationStore'
 
 export const ReservationPage: React.FC = () => {
   const params = useParams();
+  const store = useReservationStore(state=>state)
+  console.log(store, '???')
   const [order, setOrder] = useState("");
 
   const getReservationOrder = async () => {
@@ -14,7 +17,7 @@ export const ReservationPage: React.FC = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/v1/order/${params.orderId}`
       );
-      setOrder(res?.result);
+      // setOrder(res?.result);
     } catch (err) {
       console.log(err);
     }
@@ -81,8 +84,8 @@ export const ReservationPage: React.FC = () => {
                     <div className="border-5 border-start border-primary mb-1">
                       <span className="ms-2">訂房日期</span>
                     </div>
-                    <p>入住：12 月 4 日星期二</p>
-                    <p>退房：12 月 6 日星期三</p>
+                    <p>入住：{store.bookingInfo.arrivalDate} 星期二</p>
+                    <p>退房：{store.bookingInfo.arrivalDate} 星期三</p>
                   </div>
                   <a className="text-dark">編輯</a>
                 </li>
