@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import arrowLeft from "../../assets/icon/arrowLeft.svg";
-import sizeIcon from "../../assets/icon/size.svg";
-import carIcon from "../../assets/icon/car.svg";
-import personIcon from "../../assets/icon/person.svg";
 import { CheckListComponent } from "../../components/CheckListComponent";
+import axios from "axios";
+// import RoomInfo from "../../components/RoomInfo/RoomInfo";
+import { useParams } from "react-router-dom";
 
 export const ReservationPage: React.FC = () => {
+  const params = useParams();
+  const [order, setOrder] = useState("");
+
+  const getReservationOrder = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/order/${params.orderId}`
+      );
+      setOrder(res?.result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log('看',order)
+
+  useEffect(() => {
+    getReservationOrder();
+  }, []);
+
   const roomSettingData = ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"];
   const roomFacilitiyData = [
     "平面電視",
@@ -151,23 +171,13 @@ export const ReservationPage: React.FC = () => {
                   <div className="border-5 border-start border-primary mb-8">
                     <h5 className="ms-2">房型基本資訊</h5>
                   </div>
-                  <ul className="list-unstyled d-flex row">
-                    <li className="room-type-box me-4 rounded bg-light p-4">
-                      <img src={sizeIcon} className="mb-2" alt="" />
-                      <br />
-                      <span>24坪</span>
-                    </li>
-                    <li className="room-type-box me-4 rounded bg-light p-4">
-                      <img src={carIcon} className="mb-2" alt="" />
-                      <br />
-                      <span>1張大床</span>
-                    </li>
-                    <li className="room-type-box rounded bg-light p-4">
-                      <img src={personIcon} className="mb-2" alt="" />
-                      <br />
-                      <span>2-4人</span>
-                    </li>
-                  </ul>
+                  {/* <RoomInfo
+                            areaInfo={item.areaInfo}
+                            bedInfoType={item.bedInfo.type}
+                            minPeople={item.minPeople}
+                            maxPeople={item.maxPeople}
+                            border={true}
+                          /> */}
                 </li>
 
                 {/* 房間格局 */}
@@ -214,7 +224,7 @@ export const ReservationPage: React.FC = () => {
                       <span className="text-primary">-NT$ 1,000</span>
                     </li>
                     <li className="mt-4">
-                    <span>總價</span>
+                      <span>總價</span>
                       <span className="">NT$ 19,000</span>
                     </li>
                   </ul>

@@ -383,7 +383,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
                       <button
                         className="btn btn-primary text-light fw-bold w-100"
                         disabled={nights === 0 || peopleCount <= 0}
-                        onClick={() => navigate("/reservation")}
+                        onClick={() => navigate(`/reservation/${room._id}`)}
                       >
                         立即預訂
                       </button>
@@ -407,7 +407,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
                   </div>
                   <button
                     className="btn btn-primary text-white fw-bold"
-                    onClick={() => navigate("/reservation")}
+                    onClick={() => navigate(`/reservation/${room._id}`)}
                   >
                     立即預定
                   </button>
