@@ -55,7 +55,7 @@ export const FooterComponent: React.FC = () => {
           </div>
           <div className="col-md-6">
             <p className="copy-right text-start text-md-end">
-              © 享樂酒店 2023 All Rights Reserved.
+              © 享樂酒店 2024 All Rights Reserved.
             </p>
           </div>
         </div>

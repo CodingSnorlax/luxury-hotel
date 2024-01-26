@@ -1,0 +1,16 @@
+.mainImg {
+  object-fit: cover;
+}
+.bg-line {
+  background-image: url(/src/assets/img/bgLineLeft2.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 0 72px;
+}
+.content-wrap {
+  width: 416px;
+}
+.num-wrap {
+  width: 32px;
+  height: 32px;
+}

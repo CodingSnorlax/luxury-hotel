@@ -2,14 +2,14 @@ import { useState, forwardRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import LogoImg from "../../assets/img/logoWhite.svg";
 import { Link } from "react-router-dom";
-import useAppleStore from "../../store/appleStore";
+// import userLoginStore from "../../store/UserLoginStore";
 
 export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const handleToggleOffcanvas = () => setShowOffcanvas(!showOffcanvas);
 
-  const price = useAppleStore((state) => state.price);
-  const amount = useAppleStore((state) => state.amount);
+  // const userId = userLoginStore((state) => state.userId);
+  // const token = userLoginStore((state) => state.token);
 
   // 設定 Navbar 背景透明
   const [isTransparent, setIsTransparent] = useState(false);
@@ -18,7 +18,7 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const currentPath = location.pathname;
   useEffect(() => {
     // 需要透明的路由加在這裏
-    if (currentPath === "/roomList" || currentPath === "/") {
+    if (currentPath === "/roomTypes" || currentPath === "/") {
       setIsTransparent(true);
     } else {
       setIsTransparent(false);
@@ -47,7 +47,7 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
         }}
         ref={ref}
       >
-        <div className="container-fluid justify-content-between">
+        <div className="container justify-content-between">
           <Link to="/">
             <img src={LogoImg} alt="享樂酒店" />
           </Link>
@@ -63,12 +63,18 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
           {/* md 以上出現 */}
           <ul className="d-flex align-items-center d-none d-md-flex list-unstyled">
             <li className="me-3">
-              <Link className="text-light text-decoration-none" to="/">
+              <Link
+                className="px-4 text-light text-decoration-none"
+                to="/roomTypes"
+              >
                 客房旅宿
               </Link>
             </li>
             <li className="me-3">
-              <Link className="text-light text-decoration-none" to="/">
+              <Link
+                className="px-4 text-light text-decoration-none"
+                to="/login"
+              >
                 會員登入
               </Link>
             </li>
@@ -97,18 +103,20 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="offcanvas-body">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
-                  <a
-                    className="nav-link active text-light text-center"
-                    aria-current="page"
-                    href="#"
+                  <Link
+                    className="nav-link active text-light text-center text-decoration-none"
+                    to="/roomTypes"
                   >
                     客房旅宿
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link text-light text-center" href="#">
+                  <Link
+                    className="nav-link active text-light text-center text-decoration-none"
+                    to="/login"
+                  >
                     會員登入
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <button className="btn btn-primary w-100">立即訂房</button>

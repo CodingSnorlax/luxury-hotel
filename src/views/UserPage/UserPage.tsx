@@ -1,16 +1,30 @@
 import "./UserPage.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UpdatePWForm from "../../components/UpdatePWForm";
 import UpdateUserForm from "../../components/UpdateUserForm";
+import { apiGetUser } from "../../apis/userApis";
+import { IUser } from "../../interface/User";
 
 export const UserPage: React.FC = () => {
   const [resetPW, setResetPW] = useState(false);
+  const [user, setUser] = useState<IUser>();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await apiGetUser();
+      if (res && res.status) {
+        setUser(res.data.result);
+        console.log("user", res.data.result);
+      }
+    };
+    getUser();
+  }, []);
   return (
     <div>
       {/* banner */}
       <figure className="banner figure">
         <div className="container d-flex align-items-center h-100">
-          <p className="fs-1">Hello，Vic</p>
+          <p className="fs-1">Hello{user?.name ? `，${user.name}` : ""}</p>
         </div>
       </figure>
       <div className="container">

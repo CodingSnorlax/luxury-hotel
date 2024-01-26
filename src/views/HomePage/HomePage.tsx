@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import axios from "axios";
 import useAppleStore from "../../store/appleStore";
 import imgHero from "../../assets/img/imgHero.png";
@@ -12,27 +11,6 @@ import imgMap from "../../assets/img/imgMap.png";
 import "./HomePage.scss";
 
 export const HomePage: React.FC = () => {
-  const [imgUrl, setImgUrl] = useState("");
-
-  const price = useAppleStore((state) => state.price);
-  const amount = useAppleStore((state) => state.amount);
-
-  useEffect(() => {
-    axios
-      .get("https://dog.ceo/api/breeds/image/random")
-      .then((response) => {
-        const res = response.data;
-        if (res.status) {
-          setImgUrl(res.message);
-        }
-
-        console.log("回應的data", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
   return (
     <>
       {/* banner */}
@@ -151,7 +129,7 @@ export const HomePage: React.FC = () => {
                 <div className="row g-0" style={{ background: "#ffffff10" }}>
                   <div className="col-md-6">
                     <img
-                      src={imgUrl}
+                      src={imgHero}
                       className="img-fluid border border-0 rounded-4 w-100 object-fit-cover"
                       alt="Card"
                       style={{ height: "294px" }}
