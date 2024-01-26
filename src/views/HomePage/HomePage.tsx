@@ -17,7 +17,7 @@ export const HomePage: React.FC = () => {
       <section className="carousel slide">
         <div
           id="carouselExampleCaptions"
-          className="carousel slide"
+          className="carousel slide banner-box"
           data-bs-ride="carousel"
         >
           <div className="carousel-indicators">
@@ -43,7 +43,7 @@ export const HomePage: React.FC = () => {
             ></button>
           </div>
           <div className="carousel-inner">
-            <div className="carousel-item active">
+            <div className="carousel-item active banner-img">
               <img src={imgHero} className="d-block w-100 h-100vh" alt="img" />
             </div>
             {/* <div className="carousel-item h-100">
@@ -56,26 +56,28 @@ export const HomePage: React.FC = () => {
               </div>
             </div> */}
           </div>
-          <div className="carousel-style position-absolute container-fluid">
-            <div className="d-flex justify-content-between">
-              <div className="col-5 text-primary d-flex align-items-center">
-                <div className="text-start">
+          <div className="carousel-style position-absolute container-fluid container justify-content-between">
+            <div className="d-flex justify-content-between flex-column flex-lg-row  banner-text">
+              <div className="col-12 col-lg-5 text-primary d-flex align-items-center">
+                <div className="text-start w-100">
                   <h4 className="fs-1">享樂酒店</h4>
                   <p className="fs-4">Enjoyment Luxury Hotel</p>
+                  <p className="gradient-underline mt-10"></p>
                 </div>
               </div>
-              <div className="col-7 text-light d-flex align-items-center border banner-right">
-                <div className="text-start">
+              <div className="col-12 col-lg-6 text-light d-flex align-items-center border-top border-end rounded-5 banner-right">
+                <div className="col-12 text-start ml-50">
                   <h3 className="fs-100">高雄</h3>
                   <h3 className="fs-100">豪華住宿之選</h3>
                   <p className="fs-2">
                     我們致力於為您提供無與倫比的奢華體驗與優質服務
                   </p>
-                  <button className="btn btn-light col-12 text-end fw-bold fs-4 d-flex">
+                  <button className="btn btn-light col-12 d-flex justify-content-end align-item-center fw-bold fs-4 d-flex mt-10 p-10">
                     立即訂房
-                    <span>
-                      <hr />
-                    </span>
+                    <span
+                      className="ms-4 solid-underline-dark"
+                      style={{ width: "150px" }}
+                    ></span>
                   </button>
                 </div>
               </div>
@@ -108,29 +110,26 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
       {/* news */}
-      <section className="position-relative">
-        <div className="position-absolute top-0 end-0 translate-middle overflow-hidden">
-          <img src={bgDot} alt="bgDot" />
-        </div>
-        <div className="container m-120 ">
+      <section className="bg-brown">
+        <div className="container p-120">
           <div className="row container-fluid justify-content-between">
             <div className="col-2 text-primary d-flex align-items-center">
               <div className="text-start">
                 <h4 className="fs-1">最新</h4>
                 <h4 className="fs-1">消息</h4>
-                <p className="fs-4">---</p>
+                <p className="gradient-underline mt-10"></p>
               </div>
             </div>
-            <div className="col-10 text-light d-flex align-items-center">
+            <div className="position-relative col-10 text-light d-flex align-items-center">
               <div
-                className="card mb-3 border border-0 "
+                className="card mb-3 border border-0"
                 style={{ maxWidth: "100%", height: "294px" }}
               >
-                <div className="row g-0" style={{ background: "#ffffff10" }}>
+                <div className="row g-0 bg-brown">
                   <div className="col-md-6">
                     <img
                       src={imgHero}
-                      className="img-fluid border border-0 rounded-4 w-100 object-fit-cover"
+                      className="img-fluid border border-0 rounded-3 w-100 object-fit-cover"
                       alt="Card"
                       style={{ height: "294px" }}
                     />
@@ -148,6 +147,10 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
               {/*  */}
+              {/* bg */}
+              <div className="position-absolute translate-middle overflow-hidden">
+                <img src={bgDot} alt="bgDot" />
+              </div>
             </div>
           </div>
         </div>
@@ -171,33 +174,44 @@ export const HomePage: React.FC = () => {
             }}
           /> */}
           {/* <div className="position-absolute top-50 start-100 translate-middle"> */}
-          <div className="rounded-4 container row bg-primary">
-            <div className="col-10">
-              <h3 className="fs-2 text-light">
-                關於<br></br>我們
-              </h3>
-              <p className="fs-6 text-light mb-2 mt-4">
-                享樂酒店，位於美麗島高雄的心臟地帶，是這座城市的璀璨瑰寶與傲人地標。
-                我們的存在，不僅僅是為了提供奢華的住宿體驗，更是為了將高雄的美麗與活力，獻給每一位蒞臨的旅客。{" "}
-              </p>
-              <p className="fs-6 text-light mb-2 mt-4">
-                我們的酒店，擁有時尚典雅的裝潢，每一個細節都充滿著藝術與設計的精緻。
-                我們的員工，都以熱情的服務與專業的態度，讓每一位客人都能感受到賓至如歸的溫暖。{" "}
-              </p>
-              <p className="fs-6 text-light mb-2 mt-4">
-                在這裡，您可以遙望窗外，欣賞高雄的城市景色，感受這座城市的繁華與活力；您也可以舒適地坐在我們的餐廳，品嚐精緻的佳餚，體驗無與倫比的味覺盛宴。{" "}
-              </p>
-              <p className="fs-6 text-light mb-2 mt-4">
-                享樂酒店，不僅是您在高雄的住宿之選，更是您感受高雄魅力的最佳舞台。我們期待著您的蒞臨，讓我們共同編織一段難忘的高雄故事。
-              </p>
+          <div className="container">
+            <div className="row">
+              <div className="col-2"></div>
+              <div className="col-10 bg-primary brown-box">
+                <div className="brown-box-info">
+                  <div className="d-flex justify-content-start align-item-center mb-80">
+                    <h4 className="fs-2 text-light">
+                      關於<br></br>我們
+                    </h4>
+                    <span
+                      className="ms-4 solid-underline-light align-self-center"
+                      style={{ width: "150px" }}
+                    ></span>
+                  </div>
+                  <p className="fs-6 text-light mb-2 mt-4 ">
+                    享樂酒店，位於美麗島高雄的心臟地帶，是這座城市的璀璨瑰寶與傲人地標。
+                    我們的存在，不僅僅是為了提供奢華的住宿體驗，更是為了將高雄的美麗與活力，獻給每一位蒞臨的旅客。{" "}
+                  </p>
+                  <p className="fs-6 text-light mb-2 mt-4">
+                    我們的酒店，擁有時尚典雅的裝潢，每一個細節都充滿著藝術與設計的精緻。
+                    我們的員工，都以熱情的服務與專業的態度，讓每一位客人都能感受到賓至如歸的溫暖。{" "}
+                  </p>
+                  <p className="fs-6 text-light mb-2 mt-4">
+                    在這裡，您可以遙望窗外，欣賞高雄的城市景色，感受這座城市的繁華與活力；您也可以舒適地坐在我們的餐廳，品嚐精緻的佳餚，體驗無與倫比的味覺盛宴。{" "}
+                  </p>
+                  <p className="fs-6 text-light mb-2 mt-4">
+                    享樂酒店，不僅是您在高雄的住宿之選，更是您感受高雄魅力的最佳舞台。我們期待著您的蒞臨，讓我們共同編織一段難忘的高雄故事。
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         {/* </div> */}
       </section>
       {/* rooms */}
-      <section className="z-n1 bg-dark p-120 container-fluid position-relative">
-        <div className="row">
+      <section className="px-0 z-n1 bg-dark p-120 container-fluid position-relative">
+        <div className="row m-0">
           <div className="col-6">
             <img
               className="z-3 w-100 object-fit-cover border-start rounded-end-2"
