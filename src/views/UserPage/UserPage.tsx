@@ -14,7 +14,6 @@ export const UserPage: React.FC = () => {
       const res = await apiGetUser();
       if (res && res.status) {
         setUser(res.data.result);
-        console.log("user", res.data.result);
       }
     };
     getUser();
@@ -90,7 +89,7 @@ export const UserPage: React.FC = () => {
                       type="button"
                       value="重設"
                       onClick={() => setResetPW(!resetPW)}
-                      className="btn btn-primary"
+                      className="btn btn-sm btn-outline-secondary border"
                     />
                   </div>
                   {/* 更新密碼表單 */}

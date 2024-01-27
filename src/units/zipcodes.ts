@@ -418,7 +418,12 @@ export const cityListByCounty = (county: string) => {
   );
 };
 export const zipCodeByCountryAndCity = (county: string, city: string) => {
-  return (ZipCodeMap.find(item => item.county === county && item.city === city))?.zipcode
-}
+  return ZipCodeMap.find((item) => item.county === county && item.city === city)
+    ?.zipcode;
+};
+
+export const countyAndCityByZipCode = (zipCode: number) => {
+  return ZipCodeMap.find((item) => item.zipcode === zipCode);
+};
 
 export default ZipCodeMap;

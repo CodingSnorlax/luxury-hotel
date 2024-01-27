@@ -1,6 +1,7 @@
 // import react-hook-form
 import { useForm } from "react-hook-form";
 import { IReactHookFormInput } from "../interface/ReactHookForm";
+import { apiGetUser, apiPutUser } from "../apis/userApis";
 
 type InputName = "oldPassword" | "newPassword" | "checkNewPassword";
 type TUpdatePW = Record<InputName, string>;
@@ -66,16 +67,33 @@ function UpdatePWForm() {
     handleSubmit,
     formState: { errors },
     setError,
+    reset,
   } = useForm<TUpdatePW>();
-  const onSubmit = (data: TUpdatePW) => {
-    console.log(data);
-    if (data.newPassword !== data.checkNewPassword) {
-      setError("checkNewPassword", {
-        type: "manual",
-        message: "新密碼和確認新密碼不相同",
-      });
-      return;
+  const onSubmit = async (data: TUpdatePW) => {
+    try {
+      if (data.newPassword !== data.checkNewPassword) {
+        setError("checkNewPassword", {
+          type: "manual",
+          message: "新密碼和確認新密碼不相同",
+        });
+        return;
+      }
+      const user = await apiGetUser();
+
+      if (user) {
+        const submitData = {
+          userId: user.data.result._id,
+          oldPassword: data.oldPassword,
+          newPassword: data.newPassword,
+        };
+        console.log(submitData);
+        const res = await apiPutUser(submitData);
+        console.log(res);
+      }
+    } catch (err) {
+      console.log(err);
     }
+    reset();
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -97,7 +115,7 @@ function UpdatePWForm() {
           </div>
         );
       })}
-      <input type="submit" value="儲存設定" className="btn btn-primary" />
+      <input type="submit" value="儲存設定" className="btn btn-secondary" />
     </form>
   );
 }
