@@ -28,6 +28,7 @@ export const UserPage: React.FC = () => {
     res.data.result.sort((a, b) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
+
     if (res && res.status) {
       const recentOrderResult = res.data.result.filter(
         (order: any) => order.status === 0 && order.isPay === false
