@@ -15,6 +15,7 @@
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@popperjs/core": "^2.11.8",
+    "@rollup/rollup-win32-x64-msvc": "^4.9.6",
     "axios": "^1.6.5",
     "bootstrap": "^5.3.2",
     "dayjs": "^1.11.10",

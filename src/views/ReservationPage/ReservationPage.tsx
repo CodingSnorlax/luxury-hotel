@@ -4,12 +4,14 @@ import { CheckListComponent } from "../../components/CheckListComponent";
 import axios from "axios";
 // import RoomInfo from "../../components/RoomInfo/RoomInfo";
 import { useParams } from "react-router-dom";
-import useReservationStore from '../../store/ReservationStore'
+import useReservationStore from "../../store/ReservationStore";
+import useLoginStore from "../../store/LoginStore";
 
 export const ReservationPage: React.FC = () => {
   const params = useParams();
-  const store = useReservationStore(state=>state)
-  console.log(store, '???')
+  const reservationStore = useReservationStore((state) => state);
+  const loginStore = useLoginStore((state) => state);
+
   const [order, setOrder] = useState("");
 
   const getReservationOrder = async () => {
@@ -22,8 +24,6 @@ export const ReservationPage: React.FC = () => {
       console.log(err);
     }
   };
-
-  console.log('看',order)
 
   useEffect(() => {
     getReservationOrder();
@@ -84,8 +84,12 @@ export const ReservationPage: React.FC = () => {
                     <div className="border-5 border-start border-primary mb-1">
                       <span className="ms-2">訂房日期</span>
                     </div>
-                    <p>入住：{store.bookingInfo.arrivalDate} 星期二</p>
-                    <p>退房：{store.bookingInfo.arrivalDate} 星期三</p>
+                    <p>
+                      入住：{reservationStore.bookingInfo.arrivalDate} 星期二
+                    </p>
+                    <p>
+                      退房：{reservationStore.bookingInfo.arrivalDate} 星期三
+                    </p>
                   </div>
                   <a className="text-dark">編輯</a>
                 </li>
