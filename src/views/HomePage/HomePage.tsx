@@ -2,15 +2,91 @@ import React, { useState, useEffect } from "react";
 // import { Link } from "react-router-dom";
 import axios from "axios";
 import useAppleStore from "../../store/appleStore";
+//
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+//img
 import imgHero from "../../assets/img/imgHero.png";
 import bgDot from "../../assets/img/bgDot.svg";
 import bgAbout from "../../assets/img/bgAbout.png";
 import bgLineFill from "../../assets/img/bgLineFill.svg";
 import bgGradient from "../../assets/img/bgGradient.svg";
 import imgMap from "../../assets/img/imgMap.png";
+//icon
+import imgCar from "../../assets/icon/car.svg";
+import imgTrain from "../../assets/icon/train.svg";
+import imgLuxurycar from "../../assets/icon/luxurycar.svg";
+//bg
+import bgLineLeft from "../../assets/img/bgLineLeft.svg";
+import bgLineLeft2 from "../../assets/img/bgLineLeft2.svg";
+
 import "./HomePage.scss";
 
+interface News {
+  _id: string;
+  title: string;
+  description: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+}
+interface Culinary {
+  _id: string;
+  title: string;
+  description: string;
+  diningTime: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+}
+interface Room {
+  _id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  imageUrlList: string[];
+  areaInfo: string;
+  bedInfo: {
+    type: string;
+    quantity: number;
+  };
+  maxPeople: number;
+  minPeople: number;
+  price: number;
+  status: number;
+}
+
 export const HomePage: React.FC = () => {
+  const [news, setNews] = useState<News[]>([]);
+  const [culinaries, setCulinaries] = useState<Culinary[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const newsResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/news`
+        );
+        const culinaryResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/culinary`
+        );
+        const roomResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/room`
+        );
+
+        setNews(newsResponse.data.result);
+        setCulinaries(culinaryResponse.data.result);
+        setRooms(roomResponse.data.result);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       {/* banner */}
@@ -75,7 +151,7 @@ export const HomePage: React.FC = () => {
                   <button className="btn btn-light col-12 d-flex justify-content-end align-item-center fw-bold fs-4 d-flex mt-10 p-10">
                     立即訂房
                     <span
-                      className="ms-4 solid-underline-dark"
+                      className="ms-4 solid-underline-dark align-self-center"
                       style={{ width: "150px" }}
                     ></span>
                   </button>
@@ -112,57 +188,60 @@ export const HomePage: React.FC = () => {
       {/* news */}
       <section className="bg-brown">
         <div className="container p-120">
-          <div className="row container-fluid justify-content-between">
-            <div className="col-2 text-primary d-flex align-items-center">
-              <div className="text-start">
-                <h4 className="fs-1">最新</h4>
-                <h4 className="fs-1">消息</h4>
-                <p className="gradient-underline mt-10"></p>
-              </div>
-            </div>
-            <div className="position-relative col-10 text-light d-flex align-items-center">
-              <div
-                className="card mb-3 border border-0"
-                style={{ maxWidth: "100%", height: "294px" }}
-              >
-                <div className="row g-0 bg-brown">
-                  <div className="col-md-6">
-                    <img
-                      src={imgHero}
-                      className="img-fluid border border-0 rounded-3 w-100 object-fit-cover"
-                      alt="Card"
-                      style={{ height: "294px" }}
-                    />
+          {news.map((news, index) => (
+            <div className="row container-fluid" key={index}>
+              <div className="col-12 col-md-2 text-primary d-flex align-items-center">
+                {index === 0 && (
+                  <div className="text-start">
+                    <h4 className="fs-1">最新</h4>
+                    <h4 className="fs-1">消息</h4>
+                    <p className="gradient-underline mt-10"></p>
                   </div>
-                  <div className="col-md-6 d-flex align-self-center">
-                    <div className="card-body">
-                      <h5 className="card-title fs-3 fw-bold mb-6">
-                        秋季旅遊，豪華享受方案
-                      </h5>
-                      <p className="card-text fs-6">
-                        秋天就是要來場豪華的旅遊！我們為您準備了一系列的秋季特別方案，包括舒適的住宿、美食饗宴，以及精彩的活動。不論您是想來一趟浪漫之旅，還是想和家人共度美好時光，都能在這裡找到最適合的方案。
-                      </p>
+                )}
+              </div>
+              <div className="col-12 col-md-10 position-relative text-light d-flex align-items-center mb-4">
+                <div
+                  className="card mb-3 border border-0"
+                  style={{ maxWidth: "100%", height: "294px" }}
+                >
+                  <div className="row g-0 bg-brown">
+                    <div className="col-md-6">
+                      <img
+                        src={news.image}
+                        className="img-fluid border border-0 rounded-3 w-100 object-fit-cover"
+                        alt="Card"
+                        style={{ height: "294px" }}
+                      />
+                    </div>
+                    <div className="col-md-6 d-flex align-self-center">
+                      <div className="card-body">
+                        <h5 className="card-title fs-3 fw-bold mb-6">
+                          {news.title}
+                        </h5>
+                        <p className="card-text fs-6">{news.description}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              {/*  */}
-              {/* bg */}
-              <div className="position-absolute translate-middle overflow-hidden">
-                <img src={bgDot} alt="bgDot" />
+                {/*  */}
+                {/* bg */}
+                <div className="position-absolute translate-middle overflow-hidden">
+                  {index === 0 && <img src={bgDot} alt="bgDot" />}
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
       {/* about us */}
-      <section className="bg-dark p-120">
+      <section className="bg-dark p-120 pb-240">
         <div
           className=" bg-dark position-relative"
           style={{
             backgroundImage: `url(${bgAbout})`,
             minHeight: "672px",
             backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         >
           {/* <img
@@ -175,7 +254,7 @@ export const HomePage: React.FC = () => {
           /> */}
           {/* <div className="position-absolute top-50 start-100 translate-middle"> */}
           <div className="container">
-            <div className="row">
+            <div className="row position-relative" style={{ bottom: "-80px" }}>
               <div className="col-2"></div>
               <div className="col-10 bg-primary brown-box">
                 <div className="brown-box-info">
@@ -211,65 +290,194 @@ export const HomePage: React.FC = () => {
       </section>
       {/* rooms */}
       <section className="px-0 z-n1 bg-dark p-120 container-fluid position-relative">
-        <div className="row m-0">
-          <div className="col-6">
-            <img
-              className="z-3 w-100 object-fit-cover border-start rounded-end-2"
-              src={bgAbout}
-              alt="bg About"
-              style={{
-                backgroundImage: `url(${bgAbout})`,
-                minHeight: "900px",
-              }}
-            />
-          </div>
-          <div className="col-6 d-flex flex-column justify-content-end">
-            <h4 className="fs-2 text-light mb-4">尊爵雙人房</h4>
-            <p className="mb-4 text-light">
-              享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。
-            </p>
-            <h5 className="fs-2 text-light mb-4">NT$ 10,000</h5>
-            <button className="btn btn-light w-100 text-end">查看更多</button>
-          </div>
-        </div>
+        <Swiper
+          loop={true}
+          pagination={true}
+          modules={[Pagination]}
+          className="mySwiperRooms"
+        >
+          {rooms.map((room, index) => (
+            <SwiperSlide key={index}>
+              <div className="row m-0">
+                <div className="col-6">
+                  <img
+                    className="z-3 w-100 object-fit-cover border-start rounded-end-2"
+                    src={room.imageUrl}
+                    alt={`Room ${index + 1}`}
+                    style={{
+                      backgroundImage: `url(${room.imageUrl})`,
+                      minHeight: "900px",
+                    }}
+                  />
+                </div>
+                <div className="col-6 d-flex flex-column justify-content-end">
+                  <h4 className="fs-2 text-light mb-4">{room.name}</h4>
+                  <p className="mb-4 text-light">{room.description}</p>
+                  <h5 className="fs-2 text-light mb-4">NT$ {room.price}</h5>
+                  <button className="btn btn-light col-12 d-flex justify-content-end align-item-center fw-bold fs-4 d-flex mt-10 p-10">
+                    查看更多
+                    <span
+                      className="ms-4 solid-underline-dark align-self-center"
+                      style={{ width: "150px" }}
+                    ></span>
+                  </button>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
         <div className="z-0 w-100 position-absolute top-50 start-50 translate-middle">
           <img src={bgLineFill} alt="bgLineFill" className="w-100" />
           <img src={bgGradient} alt="bgGradient" className="w-100" />
         </div>
-        {/* </div> */}
       </section>
       {/* food */}
-      <section>
-        <div className="container text-primary d-flex align-items-center">
-          <div className="text-start">
-            <h4 className="fs-1">佳餚</h4>
-            <h4 className="fs-1">美饌</h4>
-            <p className="fs-4">---</p>
+      <section className="p-120">
+        <div className="position-relative container text-primary d-flex align-items-center">
+          <div className=" col-12 text-primary d-flex align-items-center">
+            <div className="d-flex justify-content-start align-item-center mb-80">
+              <h4 className="fs-1">
+                佳餚<br></br>美饌
+              </h4>
+              <span
+                className="ms-4 gradient-underline align-self-center"
+                style={{ width: "150px" }}
+              ></span>
+            </div>
           </div>
         </div>
-        <div>slide</div>
+        <div className="text-primary d-flex align-items-center">
+          <div className="container">
+            <Swiper
+              loop={true}
+              pagination={true}
+              slidesPerView={1}
+              spaceBetween={10}
+              breakpoints={{
+                640: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+              }}
+              centeredSlides={true}
+              grabCursor={true}
+              pagination={{
+                clickable: true,
+              }}
+              // modules={[Pagination]}
+              className="mySwiperFood"
+            >
+              {culinaries.map((culinary, index) => (
+                <SwiperSlide key={index}>
+                  <div
+                    className="card mb-3 border border-0"
+                    style={{ maxWidth: "100%", height: "600px" }}
+                  >
+                    <div className="row g-0 bg-brown">
+                      <div className="col-md-12 position-relative">
+                        <img
+                          src={culinary.image}
+                          className="img-fluid border border-0 rounded-3 w-100 object-fit-cover"
+                          alt="Card"
+                          style={{ width: "416px", height: "600px" }}
+                        />
+                      </div>
+                      <div className="bg-blur col-md-12 d-flex align-self-center position-absolute bottom-0">
+                        <div className="card-body text-white">
+                          <div className="d-flex justify-content-between">
+                            <h5 className="card-title fs-4 fw-bold mb-6">
+                              {culinary.title}
+                            </h5>
+                            <p className="card-text fs-6">
+                              {culinary.diningTime}
+                            </p>
+                          </div>
+                          <p className="card-text fs-6">
+                            {culinary.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+        <div>
+          <img
+            src={bgLineLeft}
+            alt="bgLineLeft"
+            className="position-absolute start-0 bottom-0 z-n1"
+          />
+        </div>
       </section>
+
       {/* transportation */}
-      <section className="bg-dark container-fluid p-120">
-        <div className="col-12 text-primary d-flex align-items-center">
-          <div className="text-start">
-            <h4 className="fs-1">交通</h4>
-            <h4 className="fs-1">方式</h4>
-            <p className="fs-4">---</p>
+      <section className="bg-dark p-120">
+        <div className="container">
+          <div className="col-12 text-primary d-flex align-items-center">
+            <div className="d-flex justify-content-start align-item-center mb-80">
+              <h4 className="fs-1">
+                交通<br></br>方式
+              </h4>
+              <span
+                className="ms-4 gradient-underline align-self-center"
+                style={{ width: "150px" }}
+              ></span>
+            </div>
           </div>
-        </div>
-        <div className="col-12 text-primary">
-          <p className="fs-6 text-dark mb-2 mt-4">
-            台灣高雄市新興區六角路123號
-          </p>
-          <img className="img-fluid" src={imgMap} alt="imgMap" />
+          <div className="col-12 text-primary">
+            <p className="fs-6 text-light mb-2 mt-4">
+              台灣高雄市新興區六角路123號
+            </p>
+            <img className="img-fluid mb-10" src={imgMap} alt="imgMap" />
+          </div>
+
+          <ul className="list-unstyled row text-light">
+            <li className="col-12 col-lg-4">
+              <img src={imgCar} alt="car" className="text-primary" />
+              <p className="fs-5 text-light">自行開車</p>
+              <p>
+                如果您選擇自行開車，可以透過國道一號下高雄交流道，往市區方向行駛，並依路標指示即可抵達「享樂酒店」。飯店內設有停車場，讓您停車方便。
+              </p>
+            </li>
+            <li className="col-12 col-lg-4">
+              <img src={imgTrain} alt="train" className="text-primary" />
+              <p className="fs-5 text-light">高鐵/火車</p>
+              <p>
+                如果您是搭乘高鐵或火車，可於左營站下車，外頭有計程車站，搭乘計程車約20分鐘即可抵達。或者您也可以轉乘捷運紅線至中央公園站下車，步行約10分鐘便可抵達。
+              </p>
+            </li>
+            <li className="col-12 col-lg-4">
+              <img
+                src={imgLuxurycar}
+                alt="Luxurycar"
+                className="fs-2 text-primary"
+              />
+              <p className="fs-5 text-light">禮賓車服務</p>
+              <p>
+                酒店提供禮賓專車接送服務，但因目的地遠近會有不同的收費，請撥打電話將由專人為您服務洽詢專線：(07)123-4567
+              </p>
+            </li>
+          </ul>
         </div>
       </section>
+      <div className="bg-dark">
+        <img src={bgLineLeft2} alt="bgLineLeft2" className="w-100" />
+      </div>
       {/* <h1>
         我在首頁也可以拿到蘋果的價格:{price} 跟蘋果的數量: {amount}{" "}
       </h1> */}
       {/* <img src={imgUrl} /> */}
-      <br />
       {/* <Link to="/login">跳到登入頁</Link> */}
     </>
   );
