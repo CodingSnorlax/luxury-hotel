@@ -4,9 +4,9 @@ import "./SignUpPage.scss";
 import SignUpPWForm from "../../components/SignUpPWForm";
 import SignUpUserForm from "../../components/SignUpUserForm";
 import { UserData } from "../../interface/Form";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { zipCodeByCountryAndCity } from "../../units/zipcodes";
+import { apiSignup } from "../../apis/userApis";
 
 interface Props {
   navbarHeight: number;
@@ -31,20 +31,14 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
       password,
       name,
       phone,
-      birthday: `${year.replace(" 年", "")}-${month.replace(
-        " 月",
-        ""
-      )}-${day.replace(" 日", "")}`,
+      birthday: `${year}-${month}-${day.replace(" 日", "")}`,
       address: {
-        zipcode: zipCodeByCountryAndCity(county, city),
+        zipcode: zipCodeByCountryAndCity(county, city) as number,
         detail: `${county}${city}${detail}`,
       },
     };
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/signup`,
-        data
-      );
+      await apiSignup(data);
       navigate("/login");
     } catch (err) {}
   };

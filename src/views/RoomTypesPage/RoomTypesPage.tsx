@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./RoomTypesPage.scss";
-import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -12,14 +11,14 @@ import { mdiChevronLeft, mdiChevronRight, mdiArrowRight } from "@mdi/js";
 import { Room } from "../../interface/Room";
 import { formatNumberWithCommas } from "../../units/format";
 import RoomInfo from "../../components/RoomInfo/RoomInfo";
+import { apiGetRooms } from "../../apis/roomApis";
 
 export const RoomTypesPage = () => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const getRooms = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/room`
-      );
+      const res = await apiGetRooms();
+      if (!res) return;
       setRoomList(res.data.result);
     } catch (err) {}
   };

@@ -212,8 +212,8 @@ function SignUpUserForm({ handleComplete }: Props) {
                       {input.name === "day" && (
                         <>
                           {daysByDate(year, month).map((day) => (
-                            <option key={day} value={day}>
-                              {day}
+                            <option key={day.value} value={day.value}>
+                              {day.text}
                             </option>
                           ))}
                         </>

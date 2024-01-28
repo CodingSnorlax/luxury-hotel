@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
 import "./RoomDetailPage.scss";
-import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 import { Room } from "../../interface/Room";
 import { formatNumberWithCommas } from "../../units/format";
@@ -19,6 +18,7 @@ import dayjs from "dayjs";
 import Icon from "@mdi/react";
 import { mdiClose } from "@mdi/js";
 import { Modal } from "bootstrap";
+import { apiGetRoomDetail } from "../../apis/roomApis";
 //取訂房資訊
 import useReservationStore from "../../store/ReservationStore";
 
@@ -33,9 +33,8 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
   const [room, setRoom] = useState<Room | null>(null);
   const getRoom = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/room/${pageParams.roomTypeId}`
-      );
+      const res = await apiGetRoomDetail(pageParams.roomTypeId as string);
+      if (!res) return;
       setRoom(res.data.result);
     } catch (err) {}
   };
@@ -49,7 +48,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
   const [dateRange, setDateRange] = useState<[DatePickerData]>([
     {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: new Date(new Date().setDate(new Date().getDate() + 1)),
       key: "selection",
     },
   ]);
@@ -66,7 +65,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
     setDateRange([
       {
         startDate: new Date(),
-        endDate: new Date(),
+        endDate: new Date(new Date().setDate(new Date().getDate() + 1)),
         key: "selection",
       },
     ]);
@@ -78,7 +77,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
   const [isSave, setIsSave] = useState(false);
 
   // 人數
-  const [peopleCount, setPeopleCount] = useState(0);
+  const [peopleCount, setPeopleCount] = useState(2);
 
   // 取得本頁面所有資料，加入狀態管理層
   const store = useReservationStore((state) => state);
