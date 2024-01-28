@@ -1,0 +1,72 @@
+.mySwiper {
+    height: 240px;
+    .swiperImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+.img-wrap {
+    height: 600px;
+    position: relative;
+    .mainImg {
+        width: 60%;
+        object-fit: cover;
+    }
+    .subImg-wrap {
+        height: 100%;
+        width: 40%;
+        .subImg {
+            width: 50%;
+            height: 50%;
+            object-fit: cover;
+        }
+    }
+}
+.seeMoreBtn {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1;
+}
+.countBtn {
+    width: 56px;
+    height: 56px;
+}
+.modal-dialog {
+    max-width: 684px !important;
+    .rdrDefinedRangesWrapper {
+        display: none;
+    }
+}
+.dateLabel {
+    font-size: 12px;
+}
+.date-wrap {
+    cursor: pointer;
+}
+
+@media(max-width: 992px) {
+    .mySwiper {
+        .swiper-pagination {
+            text-align: left;
+            left: 12px !important;
+        }
+    }
+    .seeMoreBtn {
+        right: 12px;
+        bottom: 24px;
+    }
+    .modal-dialog {
+        max-width: 352px !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
+        .btn-wrap {
+            border-top: 1px solid #ECECEC;
+            .btn {
+                width: 50%;
+            }
+        }
+    }
+}

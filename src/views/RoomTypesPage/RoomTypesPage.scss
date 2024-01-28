@@ -1,0 +1,80 @@
+@import "/src/assets/style/swiper.scss";
+.banner {
+    height: 800px;
+    background-image: url(/src/assets/img/imgHero.png);
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #000;
+        opacity: .6;
+    }
+    .banner-title-wrap {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        .banner-title {
+            border-bottom: 2px solid;
+            border-image-source: linear-gradient(to right, #BE9C7C, #FFFFFF);
+            border-image-slice: 1;
+        }
+        .divider {
+            height: 83px;
+            border-right: 2px solid;
+            border-image-source: linear-gradient(to bottom, #BE9C7C, #FFFFFF);
+            border-image-slice: 1;
+        }
+    }
+}
+.content {
+    .h-lg-100 {
+        height: 100%;
+    }
+    .roomCard {
+        height: 457px;
+    }
+    .swiperImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    .card-desc-wrap {
+        border-image-source: linear-gradient(to right, #BE9C7C, #FFFFFF);
+        border-image-slice: 1;
+    }
+}
+@media(max-width: 992px) {
+    .banner {
+        height: 466px;
+        background-image: url(/src/assets/img/imgMbHero.png);
+        background-position: top;
+        .banner-title-wrap {
+            .banner-title {
+                border: none;
+            }
+        }
+        
+    }
+    .content{
+        .h-lg-100 {
+            height: auto;
+        }
+        .roomCard {
+            height: auto;
+        }
+        .swiper {
+            height: 200px;
+        }
+    }
+    
+}

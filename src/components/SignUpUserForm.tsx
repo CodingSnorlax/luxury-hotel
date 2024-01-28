@@ -1,16 +1,12 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { IReactHookFormInput } from "../interface/ReactHookForm";
-import { years, months, days } from "../units/time";
-import {
-  countyList,
-  cityListByCounty,
-  zipCodeByCountryAndCity,
-} from "../units/zipcodes";
-import { IUser } from "../interface/User";
-import { countyAndCityByZipCode } from "../units/zipcodes";
-import { apiGetUser, apiPutUser } from "../apis/userApis";
-
+import { years, months, daysByDate } from "../units/time";
+import { countyList, cityListByCounty } from "../units/zipcodes";
+import { UserData } from "../interface/Form";
+interface Props {
+  handleComplete: (userData: UserData) => void;
+}
 type InputName =
   | "name"
   | "phone"
@@ -20,10 +16,9 @@ type InputName =
   | "county"
   | "city"
   | "detail";
+type TSignUpUser = Record<InputName, string>;
 
-type TUpdateUser = Record<InputName, string>;
-
-const updateUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
+const signUpUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
   {
     name: "name",
     label: "姓名",
@@ -50,7 +45,7 @@ const updateUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
   },
 ];
 
-const updateUserBirthdayInputs: Array<IReactHookFormInput<InputName>> = [
+const signUpUserBirthdayInputs: Array<IReactHookFormInput<InputName>> = [
   {
     name: "year",
     label: "生日",
@@ -89,7 +84,7 @@ const updateUserBirthdayInputs: Array<IReactHookFormInput<InputName>> = [
   },
 ];
 
-const updateUserAddressInputs: Array<IReactHookFormInput<InputName>> = [
+const signUpUserAddressInputs: Array<IReactHookFormInput<InputName>> = [
   {
     name: "county",
     label: "地址",
@@ -128,104 +123,40 @@ const updateUserAddressInputs: Array<IReactHookFormInput<InputName>> = [
   },
 ];
 
-const UpdateUserForm: React.FC = () => {
+function SignUpUserForm({ handleComplete }: Props) {
   const {
     register,
-    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<TUpdateUser>();
-
-  const [user, setUser] = useState<IUser>();
-  const [updateUser, setUpdateUser] = useState<TUpdateUser>({
-    name: "",
-    phone: "",
-    year: "",
-    month: "",
-    day: "",
-    county: "",
-    city: "",
-    detail: "",
-  });
+    // setError,
+  } = useForm<TSignUpUser>();
+  const onSubmit = (data: TSignUpUser) => {
+    handleComplete(data);
+  };
+  const [year, setYear] = useState("1911");
+  const [month, setMonth] = useState("1");
+  const handleDateChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.name === "year") {
+      setYear(e.target.value);
+    } else if (e.target.name === "month") {
+      setMonth(e.target.value);
+    }
+  };
   const [county, setCounty] = useState("臺北市");
   const handleCountyChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCounty(e.target.value);
   };
-
-  const onSubmit = (data: TUpdateUser) => {
-    console.log(data);
-    const { name, phone, year, month, day, county, city, detail } = data;
-    const birthday = `${year}-${month}-${day}`;
-    const zipcode = zipCodeByCountryAndCity(county, city);
-    if (!zipcode) return;
-    const address = { zipcode, detail };
-    const userInfo = { userId: user?._id, name, phone, birthday, address };
-    const updateUser = async () => {
-      try {
-        console.log(userInfo);
-        const res = await apiPutUser(userInfo);
-        if (res && res.status) {
-          console.log(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    updateUser();
+  const [isRead, setIseRead] = useState(false);
+  const handleIsReadChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIseRead(e.target.checked);
   };
-
-  const formatUserInfo = (userInfo: IUser | undefined) => {
-    if (!userInfo) return;
-    const { name, phone, birthday, address } = userInfo;
-    const [year, month, dayWithTime] = birthday.split("-");
-    const [day] = dayWithTime.split("T");
-    const { zipcode, detail } = address;
-    const result = countyAndCityByZipCode(zipcode);
-    const county = result?.county || "";
-    const city = result?.city || "";
-    setUpdateUser({
-      name,
-      phone,
-      year,
-      month: parseInt(month).toString(),
-      day: parseInt(day).toString(),
-      county,
-      city,
-      detail,
-    });
-  };
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await apiGetUser();
-        if (res && res.status) {
-          setUser(res.data.result);
-          formatUserInfo(res.data.result);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    for (const key in updateUser) {
-      setValue(
-        key as keyof typeof updateUser,
-        updateUser[key as keyof typeof updateUser]
-      );
-    }
-  }, [updateUser, setValue]);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {updateUserBaseInfoFormInputs.map(
+      {signUpUserBaseInfoFormInputs.map(
         (input: IReactHookFormInput<InputName>) => {
           return (
             <div key={input.name}>
-              <div className="mb-3">
+              <div className="mb-4">
                 <label className="form-label">{input.label}</label>
                 <input
                   type={input.type}
@@ -243,8 +174,8 @@ const UpdateUserForm: React.FC = () => {
           );
         }
       )}
-      <div className="row align-items-end mb-3">
-        {updateUserBirthdayInputs.map(
+      <div className="row align-items-end mb-4">
+        {signUpUserBirthdayInputs.map(
           (input: IReactHookFormInput<InputName>) => {
             return (
               <div className="col" key={input.name}>
@@ -254,12 +185,17 @@ const UpdateUserForm: React.FC = () => {
                     <select
                       className="form-select"
                       {...register(input.name, input.options)}
+                      onChange={
+                        input.name === "year" || input.name === "month"
+                          ? (e) => handleDateChange(e)
+                          : () => {}
+                      }
                     >
                       {input.name === "year" && (
                         <>
                           {years.map((year) => (
-                            <option key={year.value} value={year.value}>
-                              {year.text}
+                            <option key={year} value={year}>
+                              {year}
                             </option>
                           ))}
                         </>
@@ -267,17 +203,17 @@ const UpdateUserForm: React.FC = () => {
                       {input.name === "month" && (
                         <>
                           {months.map((month) => (
-                            <option key={month.value} value={month.value}>
-                              {month.text}
+                            <option key={month} value={month}>
+                              {month}
                             </option>
                           ))}
                         </>
                       )}
                       {input.name === "day" && (
                         <>
-                          {days.map((day) => (
-                            <option key={day.value} value={day.value}>
-                              {day.text}
+                          {daysByDate(year, month).map((day) => (
+                            <option key={day} value={day}>
+                              {day}
                             </option>
                           ))}
                         </>
@@ -290,8 +226,8 @@ const UpdateUserForm: React.FC = () => {
           }
         )}
       </div>
-      <div className="row align-items-end mb-3">
-        {updateUserAddressInputs.map(
+      <div className="row align-items-end mb-4">
+        {signUpUserAddressInputs.map(
           (input: IReactHookFormInput<InputName>) => {
             return (
               <div
@@ -349,9 +285,25 @@ const UpdateUserForm: React.FC = () => {
           }
         )}
       </div>
-      <input type="submit" value="儲存設定" className="btn btn-secondary" />
+      <div className="mb-10 form-check">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          id="isReaded"
+          onChange={(e) => handleIsReadChange(e)}
+        />
+        <label className="form-check-label fw-bold" htmlFor="isReaded">
+          我已閱讀並同意本網站個資使用規範
+        </label>
+      </div>
+      <input
+        type="submit"
+        value="完成註冊"
+        className="btn btn-primary text-white fw-bold w-100 mb-4"
+        disabled={!isRead}
+      />
     </form>
   );
-};
+}
 
-export default UpdateUserForm;
+export default SignUpUserForm;

@@ -2,20 +2,21 @@ import { useState, useRef, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { HomePage } from "./views/HomePage/HomePage";
 import { LoginPage } from "./views/LoginPage/LoginPage";
+import { SignUpPage } from "./views/SignUpPage/SignUpPage";
 import { UserPage } from "./views/UserPage/UserPage";
 import { NotFoundPage } from "./views/NotFoundPage/NotFoundPage";
 import { NavbarComponent } from "./components/Layout/NavbarComponent";
 import { FooterComponent } from "./components/Layout/FooterComponent";
+import { RoomTypesPage } from "./views/RoomTypesPage/RoomTypesPage";
+import { RoomDetailPage } from "./views/RoomDetailPage/RoomDetailPage";
+import { ReservationPage } from "./views/ReservationPage/ReservationPage";
+import { ReservationSuccessPage } from "./views/ReservationSuccessPage/ReservationSuccessPage";
 
 export const App: React.FC = () => {
-  const [navbarMargin, setNavbarMargin] = useState({
-    marginTop: "",
-  });
+  const [navbarHeight, setnavbarHeight] = useState(0);
   const navbarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    setNavbarMargin({
-      marginTop: `${navbarRef.current?.clientHeight}px`,
-    });
+    setnavbarHeight(navbarRef.current?.clientHeight as number);
   }, [navbarRef]);
   return (
     <>
@@ -25,10 +26,21 @@ export const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
-            path="login"
-            element={<LoginPage navbarMargin={navbarMargin} />}
+            path="/login"
+            element={<LoginPage navbarHeight={navbarHeight} />}
+          />
+          <Route
+            path="/signUp"
+            element={<SignUpPage navbarHeight={navbarHeight} />}
           />
           <Route path="/user" element={<UserPage />} />
+          <Route path="/roomTypes" element={<RoomTypesPage />} />
+          <Route
+            path="/roomDetail/:roomTypeId"
+            element={<RoomDetailPage navbarHeight={navbarHeight} />}
+          />
+          <Route path="/reservation/:orderId" element={<ReservationPage />} />
+          <Route path="/success" element={<ReservationSuccessPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterComponent />
