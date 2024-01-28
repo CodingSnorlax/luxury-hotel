@@ -13,6 +13,9 @@ const apiPutUser = (data: Partial<IUser>) => req("put", `/api/v1/user`, data);
 const apiPatchUserRole = (id: string, { isAdmin }: { isAdmin: boolean }) =>
   req("patch", `/api/v1/user/${id}/role/`, { isAdmin });
 
+const apiGetUserOrder = () => req("get", "/api/v1/order");
+const apiDeleteUser = (id: string) => req("delete", `/api/v1/order/${id}`);
+
 export {
   apiGetUser,
   apiCheckUser,
@@ -21,4 +24,6 @@ export {
   apiForgot,
   apiPutUser,
   apiPatchUserRole,
+  apiGetUserOrder,
+  apiDeleteUser,
 };
