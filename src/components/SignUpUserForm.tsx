@@ -194,8 +194,8 @@ function SignUpUserForm({ handleComplete }: Props) {
                       {input.name === "year" && (
                         <>
                           {years.map((year) => (
-                            <option key={year} value={year}>
-                              {year}
+                            <option key={year.value} value={year.value}>
+                              {year.text}
                             </option>
                           ))}
                         </>
@@ -203,8 +203,8 @@ function SignUpUserForm({ handleComplete }: Props) {
                       {input.name === "month" && (
                         <>
                           {months.map((month) => (
-                            <option key={month} value={month}>
-                              {month}
+                            <option key={month.value} value={month.value}>
+                              {month.text}
                             </option>
                           ))}
                         </>
