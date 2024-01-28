@@ -1,8 +1,15 @@
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { IReactHookFormInput } from "../interface/ReactHookForm";
 import { years, months, days } from "../units/time";
-import { countyList, cityListByCounty } from "../units/zipcodes";
+import {
+  countyList,
+  cityListByCounty,
+  zipCodeByCountryAndCity,
+} from "../units/zipcodes";
+import { IUser } from "../interface/User";
+import { countyAndCityByZipCode } from "../units/zipcodes";
+import { apiGetUser, apiPutUser } from "../apis/userApis";
 
 type InputName =
   | "name"
@@ -121,20 +128,96 @@ const updateUserAddressInputs: Array<IReactHookFormInput<InputName>> = [
   },
 ];
 
-function UpdateUserForm() {
+const UpdateUserForm: React.FC = () => {
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<TUpdateUser>();
-  const onSubmit = (data: TUpdateUser) => {
-    console.log(data);
-  };
 
+  const [user, setUser] = useState<IUser>();
+  const [updateUser, setUpdateUser] = useState<TUpdateUser>({
+    name: "",
+    phone: "",
+    year: "",
+    month: "",
+    day: "",
+    county: "",
+    city: "",
+    detail: "",
+  });
   const [county, setCounty] = useState("臺北市");
   const handleCountyChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCounty(e.target.value);
   };
+
+  const onSubmit = (data: TUpdateUser) => {
+    console.log(data);
+    const { name, phone, year, month, day, county, city, detail } = data;
+    const birthday = `${year}-${month}-${day}`;
+    const zipcode = zipCodeByCountryAndCity(county, city);
+    if (!zipcode) return;
+    const address = { zipcode, detail };
+    const userInfo = { userId: user?._id, name, phone, birthday, address };
+    const updateUser = async () => {
+      try {
+        console.log(userInfo);
+        const res = await apiPutUser(userInfo);
+        if (res && res.status) {
+          console.log(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    updateUser();
+  };
+
+  const formatUserInfo = (userInfo: IUser | undefined) => {
+    if (!userInfo) return;
+    const { name, phone, birthday, address } = userInfo;
+    const [year, month, dayWithTime] = birthday.split("-");
+    const [day] = dayWithTime.split("T");
+    const { zipcode, detail } = address;
+    const result = countyAndCityByZipCode(zipcode);
+    const county = result?.county || "";
+    const city = result?.city || "";
+    setUpdateUser({
+      name,
+      phone,
+      year,
+      month: parseInt(month).toString(),
+      day: parseInt(day).toString(),
+      county,
+      city,
+      detail,
+    });
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await apiGetUser();
+        if (res && res.status) {
+          setUser(res.data.result);
+          formatUserInfo(res.data.result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    for (const key in updateUser) {
+      setValue(
+        key as keyof typeof updateUser,
+        updateUser[key as keyof typeof updateUser]
+      );
+    }
+  }, [updateUser, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -175,8 +258,8 @@ function UpdateUserForm() {
                       {input.name === "year" && (
                         <>
                           {years.map((year) => (
-                            <option key={year} value={year}>
-                              {year}
+                            <option key={year.value} value={year.value}>
+                              {year.text}
                             </option>
                           ))}
                         </>
@@ -184,8 +267,8 @@ function UpdateUserForm() {
                       {input.name === "month" && (
                         <>
                           {months.map((month) => (
-                            <option key={month} value={month}>
-                              {month}
+                            <option key={month.value} value={month.value}>
+                              {month.text}
                             </option>
                           ))}
                         </>
@@ -193,8 +276,8 @@ function UpdateUserForm() {
                       {input.name === "day" && (
                         <>
                           {days.map((day) => (
-                            <option key={day} value={day}>
-                              {day}
+                            <option key={day.value} value={day.value}>
+                              {day.text}
                             </option>
                           ))}
                         </>
@@ -266,9 +349,9 @@ function UpdateUserForm() {
           }
         )}
       </div>
-      <input type="submit" value="儲存設定" className="btn btn-primary" />
+      <input type="submit" value="儲存設定" className="btn btn-secondary" />
     </form>
   );
-}
+};
 
 export default UpdateUserForm;

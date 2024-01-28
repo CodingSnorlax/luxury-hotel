@@ -60,6 +60,7 @@ export default (method: string, url: string, data?: any, settings?: any) => {
   method = method.toLowerCase();
   if (method === "get") return instance.get(url, data, settings);
   else if (method === "post") return instance.post(url, data, settings);
+  else if (method === "put") return instance.put(url, data, settings);
   else if (method === "patch") return instance.patch(url, data);
   else if (method === "delete") return instance.delete(url, { params: data });
   else console.log("未知的 method:" + method);
