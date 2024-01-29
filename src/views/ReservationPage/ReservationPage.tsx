@@ -3,21 +3,20 @@ import { Link, useParams } from "react-router-dom";
 import arrowLeft from "../../assets/icon/arrowLeft.svg";
 // components
 import { CheckListComponent } from "../../components/CheckListComponent";
-// import RoomInfo from "../../components/RoomInfo/RoomInfo";
+import RoomInfo from "../../components/RoomInfo/RoomInfo";
 // store
 import useReservationStore from "../../store/ReservationStore";
 import useLoginStore from "../../store/LoginStore";
 // tools
 import { formatDate } from "../../units/time";
 import { formatNumberWithCommas } from "../../units/format";
-import { countyList as cityList, cityListByCounty, zipCodeByCountryAndCity, countyAndCityByZipCode } from "../../units/zipcodes";
+import {
+  countyList as cityList,
+  cityListByCounty as getDistrictsListByCity,
+} from "../../units/zipcodes";
 // APIs
 import { apiGetUser } from "../../apis/userApis";
-
-
-console.log('zipCodeByCountryAndCity', zipCodeByCountryAndCity)
-console.log('countyAndCityByZipCode' , countyAndCityByZipCode)
-console.log('cityListByCounty', cityListByCounty)
+import { apiGetRoomDetail } from "../../apis/roomApis";
 
 export const ReservationPage: React.FC = () => {
   const params = useParams();
@@ -32,6 +31,12 @@ export const ReservationPage: React.FC = () => {
   console.log("reservationStore", reservationStore);
   console.log("loginStore", loginStore);
 
+  type CheckListItem = {
+    title: string;
+    isProvide: boolean;
+  };
+
+  /** 取會員資料 */
   const [userInfo, setUserInfo] = useState({
     name: "",
     phone: "",
@@ -55,64 +60,122 @@ export const ReservationPage: React.FC = () => {
           email,
           detail,
         });
-        console.log(res.data.result);
-        // formatUserInfo(res.data.result);
       }
     } catch (error) {
       console.log(error);
     }
   };
+  /** 取會員資料 */
 
-  const [selectedCity, setSelectedCity] = useState('');
-  const [districts, setDistricts] = useState<string[]>([])
+  /** 取縣市下拉選單資料 */
+  const [selectedCity, setSelectedCity] = useState("");
+  const [districts, setDistricts] = useState<string[]>([]);
 
   const handleCityChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    setSelectedCity(selectedValue);
+    //下拉選單選到的城市value
+    const selectedCity = event.target.value;
+    setSelectedCity(selectedCity);
 
-    const filteredDistricts = cityListByCounty(selectedValue)
-    setDistricts([...filteredDistricts])
+    //透過城市找到區域
+    const filteredDistricts = getDistrictsListByCity(selectedCity);
+    setDistricts([...filteredDistricts]);
+  };
+  /** 取縣市下拉選單資料 */
+
+  /** 取 checklist 所需資料 */
+  const [roomSettingArr, setRoomSettingArr] = useState<string[]>([]); //房間格局
+  const [facilityArr, setFacilityArr] = useState<string[]>([]); //房內設施
+  const [sparePartsArr, setSparePartsArr] = useState<string[]>([]); //備品
+  const [roomInfo, setRoomInfo] = useState({
+    //房間基本資訊
+    minPeople: "",
+    maxPeople: "",
+    bedInfoType: "",
+    areaInfo: "",
+  });
+
+  const getRoomDetail = async () => {
+    console.log("?", params.roomTypeId);
+
+    try {
+      if (params.roomTypeId) {
+        const res = await apiGetRoomDetail(params.roomTypeId);
+
+        if (res?.status) {
+          const {
+            minPeople,
+            maxPeople,
+            areaInfo,
+            bedInfo,
+            layoutInfo,
+            facilityInfo,
+            amenityInfo,
+          } = res?.data.result;
+
+          setRoomInfo({
+            minPeople,
+            maxPeople,
+            bedInfoType: bedInfo.type,
+            areaInfo: areaInfo,
+          });
+
+          let tempLayout: string[] = [];
+          let tempFacility: string[] = [];
+          let tempAmenity: string[] = [];
+
+          layoutInfo.forEach((item: CheckListItem) => {
+            tempLayout.push(item.title);
+          });
+
+          facilityInfo.forEach((item: CheckListItem) => {
+            tempFacility.push(item.title);
+          });
+
+          amenityInfo.forEach((item: CheckListItem) => {
+            tempAmenity.push(item.title);
+          });
+
+          setRoomSettingArr([...tempLayout]);
+          setFacilityArr([...tempFacility]);
+          setSparePartsArr([...tempAmenity]);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  // const getMemberInfo = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       `${import.meta.env.VITE_API_URL}/api/v1/order/${params.orderId}`
-  //     );
+  useEffect(() => {
+    getRoomDetail();
+  }, []);
+  /** 取 checklist 所需資料 */
 
-  //     // setOrder(res?.result);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  /** 算出日期之間橫跨的天數 */
+  function calculateDaysDifference(
+    startDate: Date | null,
+    endDate: Date | null
+  ) {
+    let daysDifference;
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const timeDifference = end.getTime() - start.getTime();
+      // 轉為天數
+      daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    } else {
+      daysDifference = 1;
+    }
+
+    return daysDifference;
+  }
+
+  const [bookingDays, setBookingDays] = useState(0);
 
   useEffect(() => {
-    // getReservationOrder();
-  }, []);
-
-  const roomSettingData = ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"];
-  const roomFacilitiyData = [
-    "平面電視",
-    "吹風機",
-    "冰箱",
-    "熱水壺",
-    "檯燈",
-    "衣櫃",
-    "除濕機",
-    "浴缸",
-    "書桌",
-    "音響",
-  ];
-  const sparePartsData = [
-    "衛生紙",
-    "拖鞋",
-    "沐浴用品",
-    "清潔用品",
-    "刮鬍刀",
-    "吊衣架",
-    "浴巾",
-    "刷牙用品",
-  ];
+    const cacuBookingDays = calculateDaysDifference(arrivalDate, departureDate);
+    setBookingDays(cacuBookingDays)
+  }, [arrivalDate, departureDate]);
+  /** 算出日期之間橫跨的天數 */
 
   return (
     <div className="bg-primary-40">
@@ -192,7 +255,13 @@ export const ReservationPage: React.FC = () => {
               <ul className="list-unstyled mb-16 pb-8 border-bottom border-secondary">
                 <div className="header-wrap d-flex align-items-center justify-content-between">
                   <h4 className="mb-8">訂房人資訊</h4>
-                  <a className="text-primary border-bottom" style={{'cursor': 'pointer'}} onClick={getUserInfo}>套用會員資料</a>
+                  <a
+                    className="text-primary border-bottom"
+                    style={{ cursor: "pointer" }}
+                    onClick={getUserInfo}
+                  >
+                    套用會員資料
+                  </a>
                 </div>
                 <li className="mb-4">
                   <label htmlFor="customerName" className="form-label">
@@ -235,15 +304,29 @@ export const ReservationPage: React.FC = () => {
                     地址
                   </label>
                   <div className="select-group d-flex mb-2">
-                    <select className="form-select me-2" aria-label="city" defaultValue="請選擇縣市" value={selectedCity} onChange={handleCityChange}>
-                      { cityList.map((city,index) => {
-                        return <option key={index} value={city}>{city}</option>
+                    <select
+                      className="form-select me-2"
+                      aria-label="city"
+                      defaultValue="請選擇縣市"
+                      value={selectedCity}
+                      onChange={handleCityChange}
+                    >
+                      {cityList.map((city, index) => {
+                        return (
+                          <option key={index} value={city}>
+                            {city}
+                          </option>
+                        );
                       })}
                     </select>
                     <select className="form-select" aria-label="city">
                       <option selected>請選擇區域</option>
-                      { districts.map((district,index) => {
-                        return <option key={index} value={district}>{district}</option>
+                      {districts.map((district, index) => {
+                        return (
+                          <option key={index} value={district}>
+                            {district}
+                          </option>
+                        );
                       })}
                     </select>
                   </div>
@@ -265,13 +348,13 @@ export const ReservationPage: React.FC = () => {
                   <div className="border-5 border-start border-primary mb-8">
                     <h5 className="ms-2">房型基本資訊</h5>
                   </div>
-                  {/* <RoomInfo
-                            areaInfo={item.areaInfo}
-                            bedInfoType={item.bedInfo.type}
-                            minPeople={item.minPeople}
-                            maxPeople={item.maxPeople}
-                            border={true}
-                          /> */}
+                  <RoomInfo
+                    areaInfo={roomInfo.areaInfo}
+                    bedInfoType={roomInfo.bedInfoType}
+                    minPeople={Number(roomInfo.minPeople)}
+                    maxPeople={Number(roomInfo.maxPeople)}
+                    border={false}
+                  />
                 </li>
 
                 {/* 房間格局 */}
@@ -279,7 +362,7 @@ export const ReservationPage: React.FC = () => {
                   <div className="border-5 border-start border-primary mb-8">
                     <h5 className="ms-2">房間格局</h5>
                   </div>
-                  <CheckListComponent checkListArr={roomSettingData} />
+                  <CheckListComponent checkListArr={roomSettingArr} />
                 </li>
 
                 {/* 房內設備 */}
@@ -287,7 +370,7 @@ export const ReservationPage: React.FC = () => {
                   <div className="border-5 border-start border-primary mb-8">
                     <h5 className="ms-2">房內設備</h5>
                   </div>
-                  <CheckListComponent checkListArr={roomFacilitiyData} />
+                  <CheckListComponent checkListArr={facilityArr} />
                 </li>
 
                 {/* 備品提供 */}
@@ -295,7 +378,7 @@ export const ReservationPage: React.FC = () => {
                   <div className="border-5 border-start border-primary mb-8">
                     <h5 className="ms-2">備品提供</h5>
                   </div>
-                  <CheckListComponent checkListArr={sparePartsData} />
+                  <CheckListComponent checkListArr={sparePartsArr} />
                 </li>
               </ul>
             </div>
@@ -311,10 +394,10 @@ export const ReservationPage: React.FC = () => {
                   <ul className="list-unstyled mb-12">
                     <li className="d-flex justify-content-between">
                       <span>
-                        NT$ {formatNumberWithCommas(totalPrice)} x {quantity} 晚
+                        NT$ {formatNumberWithCommas(totalPrice)} x {bookingDays} 晚
                       </span>
                       <span>
-                        NT$ {formatNumberWithCommas(totalPrice * quantity)}
+                        NT$ {formatNumberWithCommas(totalPrice * bookingDays)}
                       </span>
                     </li>
                     {/* <li className="d-flex justify-content-between pb-4  border-bottom border-gray">
@@ -325,7 +408,7 @@ export const ReservationPage: React.FC = () => {
                       <span>總價</span>
                       <span className="">
                         {" "}
-                        NT$ {formatNumberWithCommas(totalPrice * quantity)}
+                        NT$ {formatNumberWithCommas(totalPrice * bookingDays)}
                       </span>
                     </li>
                   </ul>
