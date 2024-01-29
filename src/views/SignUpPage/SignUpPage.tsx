@@ -31,7 +31,7 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
       password,
       name,
       phone,
-      birthday: `${year}-${month}-${day.replace(" 日", "")}`,
+      birthday: `${year}-${month}-${day}`,
       address: {
         zipcode: zipCodeByCountryAndCity(county, city) as number,
         detail: `${county}${city}${detail}`,
