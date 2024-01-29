@@ -9,6 +9,7 @@ import {
 } from "../../apis/userApis";
 import { IUser } from "../../interface/User";
 import { dateDiff, formatDate } from "../../units/time";
+import { formatNumberWithCommas } from "../../units/format";
 import { CheckListComponent } from "../../components/CheckListComponent";
 import { formatInfoTitleList } from "../../units/format";
 import { IOrder } from "../../interface/Order";
@@ -198,7 +199,12 @@ export const UserPage: React.FC = () => {
                       退房：{formatDate(recentOrderBookingInfo.departureDate)}
                       ，12:00 前退房
                     </p>
-                    <p>NT$ {recentOrderBookingInfo.roomTypeId.price}</p>
+                    <p>
+                      NT${" "}
+                      {formatNumberWithCommas(
+                        recentOrderBookingInfo.roomTypeId.price
+                      )}
+                    </p>
                     <hr className="my-10" />
                     <p className="quote mb-6">房內設備</p>
                     <CheckListComponent
@@ -236,13 +242,14 @@ export const UserPage: React.FC = () => {
                     historyOrder.map((order: IOrder) => {
                       return (
                         <div className="col-12 mb-10 pb-10" key={order._id}>
-                          <div className="d-flex justify-content-between">
-                            <img
-                              className="rounded-2"
-                              style={{ height: "80px" }}
-                              src={order.bookingInfo[0].roomTypeId.imageUrl}
-                            ></img>
-                            <div>
+                          <div className="row justify-content-between">
+                            <div className="col-12 col-xl-6">
+                              <img
+                                className="rounded-2 w-100 mb-6"
+                                src={order.bookingInfo[0].roomTypeId.imageUrl}
+                              ></img>
+                            </div>
+                            <div className="col-12 col-xl-6">
                               <p className="mb-4">
                                 預訂參考編號： {order.merchantOrderNo}
                               </p>
@@ -268,7 +275,9 @@ export const UserPage: React.FC = () => {
                                 退房：
                                 {formatDate(order.bookingInfo[0].departureDate)}
                               </p>
-                              <p>NT$ {order.totalPrice}</p>
+                              <p>
+                                NT$ {formatNumberWithCommas(order.totalPrice)}
+                              </p>
                             </div>
                           </div>
                           <hr />
