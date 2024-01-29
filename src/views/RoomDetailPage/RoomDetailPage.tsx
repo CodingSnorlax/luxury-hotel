@@ -93,10 +93,11 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
       store.setReservationData({
         userId: "karen", //temp
         bookingInfo: {
+          roomName: room?.name ?? '',
           roomTypeId: pageParams.roomTypeId,
           quantity: 2,
-          arrivalDate: dateRange[0].startDate.toLocaleString(),
-          departureDate: dateRange[0].endDate.toLocaleString(),
+          arrivalDate: dateRange[0].startDate,
+          departureDate: dateRange[0].endDate,
         },
         guestCount: peopleCount,
         totalPrice: room?.price ?? 0,
