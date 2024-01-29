@@ -11,13 +11,15 @@ import { IUser } from "../../interface/User";
 import { dateDiff, formatDate } from "../../units/time";
 import { CheckListComponent } from "../../components/CheckListComponent";
 import { formatInfoTitleList } from "../../units/format";
+import { IOrder } from "../../interface/Order";
 
 export const UserPage: React.FC = () => {
   const [resetPW, setResetPW] = useState(false);
   const [user, setUser] = useState<IUser>();
-  const [recentOrder, setRecentOrder] = useState();
-  const [recentOrderBookingInfo, setRecentOrderBookingInfo] = useState();
-  const [historyOrder, setHistoryOrder] = useState();
+  const [recentOrder, setRecentOrder] = useState<IOrder>();
+  const [recentOrderBookingInfo, setRecentOrderBookingInfo] =
+    useState<IOrder["bookingInfo"][0]>();
+  const [historyOrder, setHistoryOrder] = useState<IOrder[]>();
 
   const getUser = async () => {
     const res = await apiGetUser();
@@ -28,27 +30,29 @@ export const UserPage: React.FC = () => {
   const getUserOrder = async () => {
     const res = await apiGetUserOrder();
     if (res && res.status) {
-      res.data.result.sort((a, b) => {
+      res.data.result.sort((a: IOrder, b: IOrder) => {
         return (
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
       });
       const recentOrderResult = res.data.result.filter(
-        (order: any) => order.status === 0 && order.isPay === false
+        (order: IOrder) => order.status === 0 && order.isPay === false
       );
       setRecentOrder(recentOrderResult[0]);
       if (recentOrderResult[0]) {
         const { bookingInfo } = recentOrderResult[0];
-        bookingInfo.sort((a: any, b: any) => {
-          return (
-            new Date(a.arrivalDate).getTime() -
-            new Date(b.arrivalDate).getTime()
-          );
-        });
+        bookingInfo.sort(
+          (a: IOrder["bookingInfo"][0], b: IOrder["bookingInfo"][0]) => {
+            return (
+              new Date(a.arrivalDate).getTime() -
+              new Date(b.arrivalDate).getTime()
+            );
+          }
+        );
         setRecentOrderBookingInfo(bookingInfo[0]);
       }
       const historyOrder = res.data.result.filter(
-        (order: any) => order.status === 1 && order.isPay === true
+        (order: IOrder) => order.status === 1 && order.isPay === true
       );
       setHistoryOrder(historyOrder);
     }
@@ -166,46 +170,46 @@ export const UserPage: React.FC = () => {
               <div className="col-sm-12 col-md-7 p-10">
                 {/* recentOrder length 為 0  */}
                 {!recentOrder && <p>您還沒有預約行程喔～</p>}
-                {recentOrder && (
+                {recentOrder && recentOrderBookingInfo && (
                   <div>
                     <span className="mb-4">
-                      預訂參考編號： {recentOrder?.merchantOrderNo}
+                      預訂參考編號： {recentOrder.merchantOrderNo}
                     </span>
                     <p className="fs-4 mb-10">即將來的行程</p>
                     <img
                       className="img-fluid w-100 mb-10 rounded"
                       style={{ height: "434px", objectFit: "cover" }}
-                      src={recentOrderBookingInfo?.roomTypeId.imageUrl}
+                      src={recentOrderBookingInfo.roomTypeId.imageUrl}
                     ></img>
                     <p className="fs-5 mb-6">
-                      {recentOrderBookingInfo?.roomTypeId.name}，
+                      {recentOrderBookingInfo.roomTypeId.name}，
                       {dateDiff(
-                        recentOrderBookingInfo?.departureDate,
-                        recentOrderBookingInfo?.arrivalDate
+                        recentOrderBookingInfo.departureDate,
+                        recentOrderBookingInfo.arrivalDate
                       )}{" "}
                       晚 | 住宿人數：
-                      {recentOrder?.guestCount} 位
+                      {recentOrder.guestCount} 位
                     </p>
                     <p className="quote quote-primary mb-2">
-                      入住：{formatDate(recentOrderBookingInfo?.arrivalDate)}
+                      入住：{formatDate(recentOrderBookingInfo.arrivalDate)}
                       ，15:00 可入住
                     </p>
                     <p className="quote quote-secondary mb-6">
-                      退房：{formatDate(recentOrderBookingInfo?.departureDate)}
+                      退房：{formatDate(recentOrderBookingInfo.departureDate)}
                       ，12:00 前退房
                     </p>
-                    <p>NT$ {recentOrderBookingInfo?.roomTypeId.price}</p>
+                    <p>NT$ {recentOrderBookingInfo.roomTypeId.price}</p>
                     <hr className="my-10" />
                     <p className="quote mb-6">房內設備</p>
                     <CheckListComponent
                       checkListArr={formatInfoTitleList(
-                        recentOrderBookingInfo?.roomTypeId.facilityInfo
+                        recentOrderBookingInfo.roomTypeId.facilityInfo
                       )}
                     />
                     <p className="quote mb-6">備品提供</p>
                     <CheckListComponent
                       checkListArr={formatInfoTitleList(
-                        recentOrderBookingInfo?.roomTypeId.amenityInfo
+                        recentOrderBookingInfo.roomTypeId.amenityInfo
                       )}
                     />
                     <div className="d-flex justify-content-between">
@@ -228,48 +232,49 @@ export const UserPage: React.FC = () => {
               <div className="col-sm-12 col-md-5 p-10">
                 <p className="fs-4 mb-10">歷史訂單</p>
                 <div className="row">
-                  {historyOrder?.map((order: any) => {
-                    return (
-                      <div className="col-12 mb-10 pb-10" key={order._id}>
-                        <div className="d-flex justify-content-between">
-                          <img
-                            className="rounded-2"
-                            style={{ height: "80px" }}
-                            src={order?.bookingInfo[0]?.roomTypeId?.imageUrl}
-                          ></img>
-                          <div>
-                            <p className="mb-4">
-                              預訂參考編號： {order?.merchantOrderNo}
-                            </p>
-                            <p className="fs-5 mb-4">
-                              {order?.bookingInfo[0]?.roomTypeId?.name}
-                            </p>
-                            <p className="mb-2">
-                              住宿天數：
-                              {dateDiff(
-                                order?.bookingInfo[0]?.departureDate,
-                                order?.bookingInfo[0]?.arrivalDate
-                              )}{" "}
-                              晚
-                            </p>
-                            <p className="mb-4">
-                              住宿人數：{order.guestCount} 位
-                            </p>
-                            <p className="quote quote-primary mb-2">
-                              入住：
-                              {formatDate(order?.bookingInfo[0]?.arrivalDate)}
-                            </p>
-                            <p className="quote quote-secondary mb-4">
-                              退房：
-                              {formatDate(order?.bookingInfo[0]?.departureDate)}
-                            </p>
-                            <p>NT$ {order.totalPrice}</p>
+                  {historyOrder &&
+                    historyOrder.map((order: IOrder) => {
+                      return (
+                        <div className="col-12 mb-10 pb-10" key={order._id}>
+                          <div className="d-flex justify-content-between">
+                            <img
+                              className="rounded-2"
+                              style={{ height: "80px" }}
+                              src={order.bookingInfo[0].roomTypeId.imageUrl}
+                            ></img>
+                            <div>
+                              <p className="mb-4">
+                                預訂參考編號： {order.merchantOrderNo}
+                              </p>
+                              <p className="fs-5 mb-4">
+                                {order.bookingInfo[0].roomTypeId.name}
+                              </p>
+                              <p className="mb-2">
+                                住宿天數：
+                                {dateDiff(
+                                  order.bookingInfo[0].departureDate,
+                                  order.bookingInfo[0].arrivalDate
+                                )}{" "}
+                                晚
+                              </p>
+                              <p className="mb-4">
+                                住宿人數：{order.guestCount} 位
+                              </p>
+                              <p className="quote quote-primary mb-2">
+                                入住：
+                                {formatDate(order.bookingInfo[0].arrivalDate)}
+                              </p>
+                              <p className="quote quote-secondary mb-4">
+                                退房：
+                                {formatDate(order.bookingInfo[0].departureDate)}
+                              </p>
+                              <p>NT$ {order.totalPrice}</p>
+                            </div>
                           </div>
+                          <hr />
                         </div>
-                        <hr />
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
                 {/* <input
                   type="button"
