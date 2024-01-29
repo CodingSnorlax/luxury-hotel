@@ -9,6 +9,8 @@ import {
 } from "../../apis/userApis";
 import { IUser } from "../../interface/User";
 import { dateDiff, formatDate } from "../../units/time";
+import { CheckListComponent } from "../../components/CheckListComponent";
+import { formatInfoTitleList } from "../../units/format";
 
 export const UserPage: React.FC = () => {
   const [resetPW, setResetPW] = useState(false);
@@ -25,11 +27,12 @@ export const UserPage: React.FC = () => {
   };
   const getUserOrder = async () => {
     const res = await apiGetUserOrder();
-    res.data.result.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
-
     if (res && res.status) {
+      res.data.result.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
       const recentOrderResult = res.data.result.filter(
         (order: any) => order.status === 0 && order.isPay === false
       );
@@ -194,51 +197,17 @@ export const UserPage: React.FC = () => {
                     <p>NT$ {recentOrderBookingInfo?.roomTypeId.price}</p>
                     <hr className="my-10" />
                     <p className="quote mb-6">房內設備</p>
-                    <ul className="list-unstyled grid p-6 border border-gray rounded">
-                      {recentOrderBookingInfo?.roomTypeId.facilityInfo.map(
-                        (layout: any) => {
-                          return (
-                            layout.isProvide && (
-                              <li
-                                key={layout.title}
-                                className="g-col-2 d-flex align-items-center"
-                              >
-                                <img
-                                  className="me-2 block"
-                                  src="../../src/assets/icon/check.svg"
-                                ></img>
-                                <span className="text-nowrap">
-                                  {layout.title}
-                                </span>
-                              </li>
-                            )
-                          );
-                        }
+                    <CheckListComponent
+                      checkListArr={formatInfoTitleList(
+                        recentOrderBookingInfo?.roomTypeId.facilityInfo
                       )}
-                    </ul>
+                    />
                     <p className="quote mb-6">備品提供</p>
-                    <ul className="list-unstyled grid p-6 border border-gray rounded">
-                      {recentOrderBookingInfo?.roomTypeId.amenityInfo.map(
-                        (layout: any) => {
-                          return (
-                            layout.isProvide && (
-                              <li
-                                key={layout.title}
-                                className="g-col-2 d-flex align-items-center"
-                              >
-                                <img
-                                  className="me-2 block"
-                                  src="../../src/assets/icon/check.svg"
-                                ></img>
-                                <span className="text-nowrap">
-                                  {layout.title}
-                                </span>
-                              </li>
-                            )
-                          );
-                        }
+                    <CheckListComponent
+                      checkListArr={formatInfoTitleList(
+                        recentOrderBookingInfo?.roomTypeId.amenityInfo
                       )}
-                    </ul>
+                    />
                     <div className="d-flex justify-content-between">
                       <input
                         type="button"
