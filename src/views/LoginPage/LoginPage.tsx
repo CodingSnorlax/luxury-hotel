@@ -4,12 +4,16 @@ import LoginForm from "../../components/LoginForm";
 import { PWData } from "../../interface/Form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useLoginStore from "../../store/LoginStore";
 
 interface Props {
   navbarHeight: number;
 }
 export const LoginPage = ({ navbarHeight }: Props) => {
   const navigate = useNavigate();
+  // 取得本頁面所有資料，加入狀態管理層
+  const store = useLoginStore((state) => state);
+
   const handleLogin = async (PWData: PWData) => {
     try {
       const res = await axios.post(
@@ -17,8 +21,49 @@ export const LoginPage = ({ navbarHeight }: Props) => {
         PWData
       );
       document.cookie = `token=${res.data.token}`;
-      navigate("/");
-    } catch (err) {}
+
+      const {
+        status,
+        token,
+        user: { birthday, createdAt, email, name, phone, updatedAt, _id },
+      } = res.data;
+
+      if (status) {
+        //登入成功就帶資料回去
+        store.setLoginData({
+          loginStatus: status,
+          token: token,
+          user: {
+            birthday,
+            createdAt,
+            email,
+            name,
+            phone,
+            updatedAt,
+            _id,
+          },
+        });
+
+        //轉回首頁
+        navigate("/");
+      }
+    } catch (err) {
+      //登入失敗就清空資料
+      store.setLoginData({
+        loginStatus: null,
+        token: "",
+        user: {
+          birthday: "",
+          createdAt: "",
+          email: "",
+          name: "",
+          phone: "",
+          updatedAt: "",
+          _id: "",
+        },
+      });
+      alert("登入失敗!");
+    }
   };
   return (
     <div className="row g-0">
