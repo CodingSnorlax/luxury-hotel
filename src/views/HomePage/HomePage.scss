@@ -5,8 +5,12 @@
     bottom: 0;
     //width: 100%;
 }
+//font
 .fs-100{
   font-size: 100px;
+  @media(max-width: 992px) {
+  font-size: 48px;
+  }
 }
 .banner-box{
   .banner-img{
@@ -41,6 +45,17 @@
     .ml-50{
       margin-left: -50px;
     }
+  }
+  @media(max-width: 992px) {
+    .banner-right{
+      border-radius: 40px 40px 0px 40px;
+      min-width: 100%;
+      padding: 40px 0;
+    }
+    .fs-2{
+      font-size: 1rem;
+    }
+  
   }
 }
 //about
