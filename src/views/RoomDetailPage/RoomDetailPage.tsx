@@ -21,6 +21,7 @@ import { Modal } from "bootstrap";
 import { apiGetRoomDetail } from "../../apis/roomApis";
 //取訂房資訊
 import useReservationStore from "../../store/ReservationStore";
+import useLoginStore from "../../store/LoginStore";
 
 interface Props {
   navbarHeight: number;
@@ -81,17 +82,16 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
 
   // 取得本頁面所有資料，加入狀態管理層
   const store = useReservationStore((state) => state);
+  const loginStore = useLoginStore((state) => state)
 
   const handleSubmit = () => {
     //取使用者目前登入情形
-    //const [userLoginState, setUserLoginState] = useState(false);
-
-    if (true) {
+    if (loginStore.getLoginData().loginStatus) {
       //假設已登入 就跳轉到下一頁
       navigate(`/reservation/${room?._id}`);
       //帶資料回去
       store.setReservationData({
-        userId: "karen", //temp
+        userId: loginStore.getLoginData().user._id,
         bookingInfo: {
           roomName: room?.name ?? '',
           roomTypeId: pageParams.roomTypeId,

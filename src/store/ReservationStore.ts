@@ -4,8 +4,8 @@ type BookingInfo = {
   roomName: string | null;
   roomTypeId: string | undefined;
   quantity: number;
-  arrivalDate: Date | null;
-  departureDate: Date | null;
+  arrivalDate: Date;
+  departureDate: Date;
 };
 
 interface ReservationStoreState {
@@ -29,8 +29,8 @@ const useReservationStore = create<
     roomName: '',
     roomTypeId: "",
     quantity: 1,
-    arrivalDate: null,
-    departureDate: null,
+    arrivalDate: new Date(),
+    departureDate: new Date(),
   },
   guestCount: 2,
   totalPrice: 0,

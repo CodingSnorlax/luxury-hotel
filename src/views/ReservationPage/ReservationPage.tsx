@@ -17,13 +17,19 @@ import {
 // APIs
 import { apiGetUser } from "../../apis/userApis";
 import { apiGetRoomDetail } from "../../apis/roomApis";
+import { apiPostReservationData } from "../../apis/reservationApis";
+// types
+import {
+  ReservationPostData,
+  BookingInfoData,
+} from "../../interface/Reservation";
 
 export const ReservationPage: React.FC = () => {
   const params = useParams();
   const reservationStore = useReservationStore((state) => state);
   const loginStore = useLoginStore((state) => state);
 
-  const { arrivalDate, departureDate, quantity, roomName, roomTypeId } =
+  const { arrivalDate, departureDate, quantity, roomName } =
     reservationStore.bookingInfo;
   const { guestCount, totalPrice, userId } = reservationStore;
 
@@ -92,11 +98,10 @@ export const ReservationPage: React.FC = () => {
     maxPeople: "",
     bedInfoType: "",
     areaInfo: "",
+    imageUrl: "",
   });
 
   const getRoomDetail = async () => {
-    console.log("?", params.roomTypeId);
-
     try {
       if (params.roomTypeId) {
         const res = await apiGetRoomDetail(params.roomTypeId);
@@ -110,18 +115,20 @@ export const ReservationPage: React.FC = () => {
             layoutInfo,
             facilityInfo,
             amenityInfo,
-          } = res?.data.result;
+            imageUrl,
+          } = res.data.result;
 
           setRoomInfo({
             minPeople,
             maxPeople,
             bedInfoType: bedInfo.type,
             areaInfo: areaInfo,
+            imageUrl,
           });
 
-          let tempLayout: string[] = [];
-          let tempFacility: string[] = [];
-          let tempAmenity: string[] = [];
+          const tempLayout: string[] = [];
+          const tempFacility: string[] = [];
+          const tempAmenity: string[] = [];
 
           layoutInfo.forEach((item: CheckListItem) => {
             tempLayout.push(item.title);
@@ -152,8 +159,8 @@ export const ReservationPage: React.FC = () => {
 
   /** 算出日期之間橫跨的天數 */
   function calculateDaysDifference(
-    startDate: Date | null,
-    endDate: Date | null
+    startDate: Date | string,
+    endDate: Date | string
   ) {
     let daysDifference;
     if (startDate && endDate) {
@@ -173,9 +180,50 @@ export const ReservationPage: React.FC = () => {
 
   useEffect(() => {
     const cacuBookingDays = calculateDaysDifference(arrivalDate, departureDate);
-    setBookingDays(cacuBookingDays)
+    setBookingDays(cacuBookingDays);
   }, [arrivalDate, departureDate]);
   /** 算出日期之間橫跨的天數 */
+
+  /** 送出確認訂房資料 */
+  const postReservationData = async () => {
+    const postData: ReservationPostData = {
+      userId: "",
+      bookingInfo: [],
+      guestCount: 0,
+      totalPrice: 0,
+      notes: "",
+    };
+
+    const bookingDetailInfo: BookingInfoData = {
+      roomTypeId: "",
+      quantity: 0,
+      arrivalDate: new Date(),
+      departureDate: new Date(),
+    };
+
+    if (userId) {
+      postData.userId = userId;
+      postData.guestCount = guestCount;
+      postData.totalPrice = totalPrice * bookingDays;
+      bookingDetailInfo.roomTypeId = params.roomTypeId ?? "";
+      bookingDetailInfo.quantity = quantity;
+      bookingDetailInfo.arrivalDate = arrivalDate;
+      bookingDetailInfo.departureDate = departureDate;
+      postData.bookingInfo.push(bookingDetailInfo);
+    } else {
+      alert("請確認已登入會員，再進行訂房作業");
+    }
+
+    console.log("postData", postData);
+    console.log("bookingDetailInfo", bookingDetailInfo);
+    try {
+      const res = await apiPostReservationData(postData);
+      console.log("送出資料的res!", res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  /** 送出確認訂房資料 */
 
   return (
     <div className="bg-primary-40">
@@ -385,16 +433,14 @@ export const ReservationPage: React.FC = () => {
             {/* 卡片區 */}
             <div className="col-md-4">
               <div className="card p-10 ms-0 ms-md-8 sticky-top">
-                <img
-                  src="https://images.unsplash.com/photo-1560448205-4d9b3e6bb6db?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  className="card-img-top mb-8"
-                />
+                <img src={roomInfo.imageUrl} className="card-img-top mb-8" />
                 <div className="card-bod p-0">
                   <h4 className="card-title mb-8">價格詳情</h4>
                   <ul className="list-unstyled mb-12">
                     <li className="d-flex justify-content-between">
                       <span>
-                        NT$ {formatNumberWithCommas(totalPrice)} x {bookingDays} 晚
+                        NT$ {formatNumberWithCommas(totalPrice)} x {bookingDays}{" "}
+                        晚
                       </span>
                       <span>
                         NT$ {formatNumberWithCommas(totalPrice * bookingDays)}
@@ -404,7 +450,7 @@ export const ReservationPage: React.FC = () => {
                       <span>住宿折扣</span>
                       <span className="text-primary">-NT$ 1,000</span>
                     </li> */}
-                    <li className="mt-4">
+                    <li className="mt-4 d-flex justify-content-between">
                       <span>總價</span>
                       <span className="">
                         {" "}
@@ -412,7 +458,10 @@ export const ReservationPage: React.FC = () => {
                       </span>
                     </li>
                   </ul>
-                  <button className="btn btn-primary text-light w-100 mb-0">
+                  <button
+                    className="btn btn-primary text-light w-100 mb-0"
+                    onClick={postReservationData}
+                  >
                     確認訂房
                   </button>
                 </div>
