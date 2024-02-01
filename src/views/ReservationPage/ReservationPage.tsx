@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import arrowLeft from "../../assets/icon/arrowLeft.svg";
 // components
 import { CheckListComponent } from "../../components/CheckListComponent";
@@ -26,6 +26,7 @@ import {
 
 export const ReservationPage: React.FC = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const reservationStore = useReservationStore((state) => state);
   const loginStore = useLoginStore((state) => state);
 
@@ -219,6 +220,9 @@ export const ReservationPage: React.FC = () => {
     try {
       const res = await apiPostReservationData(postData);
       console.log("送出資料的res!", res);
+      if(res?.data.status){
+        navigate(`/success`);
+      }
     } catch (err) {
       console.log(err);
     }
