@@ -1,12 +1,12 @@
 import req from "./https";
-import { IUser, IUserForgot } from "../interface/User";
+import { IUser, IUserForgot, IUserLogin } from "../interface/User";
 
 // User
 const apiGetUser = () => req("get", "/api/v1/user");
 const apiCheckUser = () => req("get", "/api/v1/user/check");
 const apiSignup = (data: IUser) => req("post", "/api/v1/user/signup/", data);
-const apiLogin = ({ email, password }: IUser) =>
-  req("post", "/api/v1/user/login/", { email, password });
+const apiLogin = (data: IUserLogin) =>
+  req("post", "/api/v1/user/login/", data);
 const apiForgot = (data: IUserForgot) =>
   req("post", "/api/v1/user/forgot/", data);
 const apiPutUser = (data: Partial<IUser>) => req("put", `/api/v1/user`, data);

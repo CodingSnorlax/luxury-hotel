@@ -39,7 +39,7 @@ export const App: React.FC = () => {
             path="/roomDetail/:roomTypeId"
             element={<RoomDetailPage navbarHeight={navbarHeight} />}
           />
-          <Route path="/reservation/:orderId" element={<ReservationPage />} />
+          <Route path="/reservation/:roomTypeId" element={<ReservationPage />} />
           <Route path="/success" element={<ReservationSuccessPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

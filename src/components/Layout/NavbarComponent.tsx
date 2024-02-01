@@ -2,14 +2,12 @@ import { useState, forwardRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import LogoImg from "../../assets/img/logoWhite.svg";
 import { Link } from "react-router-dom";
-// import userLoginStore from "../../store/UserLoginStore";
+import useLoginStore from "../../store/LoginStore";
+import { Icon as Iconify } from "@iconify/react";
 
 export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const handleToggleOffcanvas = () => setShowOffcanvas(!showOffcanvas);
-
-  // const userId = userLoginStore((state) => state.userId);
-  // const token = userLoginStore((state) => state.token);
 
   // 設定 Navbar 背景透明
   const [isTransparent, setIsTransparent] = useState(false);
@@ -35,6 +33,10 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  //直接取目前使用者登入狀態
+  const isLogin = useLoginStore((state) => state.getLoginData().loginStatus);
+  const userName = useLoginStore((state) => state.getLoginData().user.name);
 
   return (
     <>
@@ -71,12 +73,19 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
               </Link>
             </li>
             <li className="me-3">
-              <Link
-                className="px-4 text-light text-decoration-none"
-                to="/login"
-              >
-                會員登入
-              </Link>
+              {isLogin ? (
+                <Link className="px-4 text-light text-decoration-none" to="/user">
+                  <Iconify icon="gg:profile" className="me-2 fs-4 text-light" />
+                  {userName}
+                </Link>
+              ) : (
+                <Link
+                  className="px-4 text-light text-decoration-none"
+                  to="/login"
+                >
+                  會員登入
+                </Link>
+              )}
             </li>
             <li className="me-3">
               <button className="btn btn-primary text-light">立即訂房</button>

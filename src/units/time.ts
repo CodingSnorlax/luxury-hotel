@@ -14,7 +14,10 @@ export const days = Array.from({ length: 31 }, (_, i) => ({
 export const daysByDate = (year: string, month: string) => {
   return Array.from(
     { length: new Date(Number(year), Number(month), 0).getDate() },
-    (_, index) => `${index + 1} 日`
+    (_, i) => ({
+      value: i + 1,
+      text: `${i + 1} 日`,
+    })
   );
 };
 

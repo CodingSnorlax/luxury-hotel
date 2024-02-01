@@ -2,9 +2,9 @@ import "./LoginPage.scss";
 import { Link } from "react-router-dom";
 import LoginForm from "../../components/LoginForm";
 import { PWData } from "../../interface/Form";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import useLoginStore from "../../store/LoginStore";
+import { apiLogin } from "../../apis/userApis";
 
 interface Props {
   navbarHeight: number;
@@ -16,10 +16,8 @@ export const LoginPage = ({ navbarHeight }: Props) => {
 
   const handleLogin = async (PWData: PWData) => {
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/login`,
-        PWData
-      );
+      const res = await apiLogin(PWData);
+      if (!res) return;
       document.cookie = `token=${res.data.token}`;
 
       const {

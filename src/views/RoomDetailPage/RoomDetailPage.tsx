@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
 import "./RoomDetailPage.scss";
-import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 import { Room } from "../../interface/Room";
 import { formatNumberWithCommas } from "../../units/format";
@@ -19,8 +18,10 @@ import dayjs from "dayjs";
 import Icon from "@mdi/react";
 import { mdiClose } from "@mdi/js";
 import { Modal } from "bootstrap";
+import { apiGetRoomDetail } from "../../apis/roomApis";
 //取訂房資訊
 import useReservationStore from "../../store/ReservationStore";
+import useLoginStore from "../../store/LoginStore";
 
 interface Props {
   navbarHeight: number;
@@ -33,9 +34,8 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
   const [room, setRoom] = useState<Room | null>(null);
   const getRoom = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/room/${pageParams.roomTypeId}`
-      );
+      const res = await apiGetRoomDetail(pageParams.roomTypeId as string);
+      if (!res) return;
       setRoom(res.data.result);
     } catch (err) {}
   };
@@ -49,7 +49,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
   const [dateRange, setDateRange] = useState<[DatePickerData]>([
     {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: new Date(new Date().setDate(new Date().getDate() + 1)),
       key: "selection",
     },
   ]);
@@ -66,7 +66,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
     setDateRange([
       {
         startDate: new Date(),
-        endDate: new Date(),
+        endDate: new Date(new Date().setDate(new Date().getDate() + 1)),
         key: "selection",
       },
     ]);
@@ -78,26 +78,26 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
   const [isSave, setIsSave] = useState(false);
 
   // 人數
-  const [peopleCount, setPeopleCount] = useState(0);
+  const [peopleCount, setPeopleCount] = useState(2);
 
   // 取得本頁面所有資料，加入狀態管理層
   const store = useReservationStore((state) => state);
+  const loginStore = useLoginStore((state) => state)
 
   const handleSubmit = () => {
     //取使用者目前登入情形
-    //const [userLoginState, setUserLoginState] = useState(false);
-
-    if (true) {
+    if (loginStore.getLoginData().loginStatus) {
       //假設已登入 就跳轉到下一頁
       navigate(`/reservation/${room?._id}`);
       //帶資料回去
       store.setReservationData({
-        userId: "karen", //temp
+        userId: loginStore.getLoginData().user._id,
         bookingInfo: {
+          roomName: room?.name ?? '',
           roomTypeId: pageParams.roomTypeId,
           quantity: 2,
-          arrivalDate: dateRange[0].startDate.toLocaleString(),
-          departureDate: dateRange[0].endDate.toLocaleString(),
+          arrivalDate: dateRange[0].startDate,
+          departureDate: dateRange[0].endDate,
         },
         guestCount: peopleCount,
         totalPrice: room?.price ?? 0,

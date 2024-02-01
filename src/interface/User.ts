@@ -17,3 +17,8 @@ export interface IUserForgot {
   code: string;
   newPassword: string;
 }
+
+export interface IUserLogin {
+  email: string;
+  password: string
+}
