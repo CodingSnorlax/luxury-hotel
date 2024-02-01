@@ -6,7 +6,7 @@ import { CheckListComponent } from "../../components/CheckListComponent";
 import RoomInfo from "../../components/RoomInfo/RoomInfo";
 // store
 import useReservationStore from "../../store/ReservationStore";
-import useLoginStore from "../../store/LoginStore";
+import useReservationSuccessStore from "../../store/ReservationSuccessStore";
 // tools
 import { formatDate } from "../../units/time";
 import { formatNumberWithCommas } from "../../units/format";
@@ -28,15 +28,10 @@ export const ReservationPage: React.FC = () => {
   const params = useParams();
   const navigate = useNavigate();
   const reservationStore = useReservationStore((state) => state);
-  const loginStore = useLoginStore((state) => state);
 
   const { arrivalDate, departureDate, quantity, roomName } =
     reservationStore.bookingInfo;
   const { guestCount, totalPrice, userId } = reservationStore;
-
-  console.log("params", params);
-  console.log("reservationStore", reservationStore);
-  console.log("loginStore", loginStore);
 
   type CheckListItem = {
     title: string;
@@ -185,6 +180,7 @@ export const ReservationPage: React.FC = () => {
   }, [arrivalDate, departureDate]);
   /** 算出日期之間橫跨的天數 */
 
+  const successStore = useReservationSuccessStore((state) => state);
   /** 送出確認訂房資料 */
   const postReservationData = async () => {
     const postData: ReservationPostData = {
@@ -215,13 +211,28 @@ export const ReservationPage: React.FC = () => {
       alert("請確認已登入會員，再進行訂房作業");
     }
 
-    console.log("postData", postData);
-    console.log("bookingDetailInfo", bookingDetailInfo);
     try {
       const res = await apiPostReservationData(postData);
-      console.log("送出資料的res!", res);
-      if(res?.data.status){
+
+      if (res?.data.status) {
+        console.log("送出資料回應的res", res);
+        //帶資料回去success 頁面
+        successStore.setReservationSuccessData({
+          userId: loginStore.getLoginData().user._id,
+          bookingInfo: {
+            roomName: room?.name ?? "",
+            roomTypeId: pageParams.roomTypeId,
+            quantity: 2,
+            arrivalDate: dateRange[0].startDate,
+            departureDate: dateRange[0].endDate,
+          },
+          guestCount: peopleCount,
+          totalPrice: room?.price ?? 0,
+          notes: "temp",
+        });
         navigate(`/success`);
+      } else {
+        alert("訂房失敗，請再試一次！");
       }
     } catch (err) {
       console.log(err);

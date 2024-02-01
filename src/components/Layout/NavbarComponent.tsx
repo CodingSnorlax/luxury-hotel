@@ -74,14 +74,8 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
             </li>
             <li className="me-3">
               {isLogin ? (
-                <Link
-                  className="px-4 text-light text-decoration-none"
-                  to="/login"
-                >
-                  <Iconify
-                    icon="gg:profile"
-                    className="me-2 fs-4 text-light"
-                  />
+                <Link className="px-4 text-light text-decoration-none" to="/user">
+                  <Iconify icon="gg:profile" className="me-2 fs-4 text-light" />
                   {userName}
                 </Link>
               ) : (
