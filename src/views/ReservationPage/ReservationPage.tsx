@@ -180,8 +180,8 @@ export const ReservationPage: React.FC = () => {
   }, [arrivalDate, departureDate]);
   /** 算出日期之間橫跨的天數 */
 
-  const successStore = useReservationSuccessStore((state) => state);
   /** 送出確認訂房資料 */
+  const successStore = useReservationSuccessStore((state) => state);
   const postReservationData = async () => {
     const postData: ReservationPostData = {
       userId: "",
@@ -216,26 +216,35 @@ export const ReservationPage: React.FC = () => {
 
       if (res?.data.status) {
         console.log("送出資料回應的res", res);
-        //帶資料回去success 頁面
+        //帶資料到 success 頁面
         successStore.setReservationSuccessData({
-          userId: loginStore.getLoginData().user._id,
-          bookingInfo: {
-            roomName: room?.name ?? "",
-            roomTypeId: pageParams.roomTypeId,
-            quantity: 2,
-            arrivalDate: dateRange[0].startDate,
-            departureDate: dateRange[0].endDate,
+          orderId: res.data.result._id,
+          customerInfo: {
+            customerName: userInfo.name,
+            cellPhoneNumber: userInfo.phone,
+            email: userInfo.email,
           },
-          guestCount: peopleCount,
-          totalPrice: room?.price ?? 0,
-          notes: "temp",
+          bookingInfo: {
+            imgUrl: roomInfo.imageUrl,
+            roomName: roomName,
+            bookingDays: bookingDays,
+            guestCount: guestCount,
+            arrivalDate: arrivalDate,
+            departureDate: departureDate,
+            totalPrice: totalPrice * bookingDays,
+          },
+          roomInfo: {
+            facility: facilityArr,
+            amenity: sparePartsArr,
+          },
         });
-        navigate(`/success`);
       } else {
         alert("訂房失敗，請再試一次！");
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      navigate(`/success`);
     }
   };
   /** 送出確認訂房資料 */

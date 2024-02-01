@@ -1,16 +1,40 @@
-import React, { useState } from "react";
-import { CheckListComponent } from "../../components/CheckListComponent";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { Icon as Iconify } from "@iconify/react";
+import useReservationSuccessStore from "../../store/ReservationSuccessStore";
+// tools
+import { formatDate } from "../../units/time";
+import { formatNumberWithCommas } from "../../units/format";
+import Icon from "@mdi/react";
+import { mdiCheck } from "@mdi/js";
 
 export const ReservationSuccessPage: React.FC = () => {
-  const [facilityArr, setFacilityArr] = useState(["吹風機", "吸塵器"]);
-  const [sparePartsArr, setSparePartsArr] = useState(["吹風機", "吸塵器"]);
+  const successData = useReservationSuccessStore((state) =>
+    state.getReservationSuccessData()
+  );
+
+  //客戶資訊
+  const { customerName, cellPhoneNumber, email } = successData.customerInfo;
+
+  //訂房資訊
+  const {
+    imgUrl,
+    roomName,
+    bookingDays,
+    guestCount,
+    arrivalDate,
+    departureDate,
+    totalPrice,
+  } = successData.bookingInfo;
+
+  //房間資訊
+  const { facility, amenity } = successData.roomInfo;
+
   return (
     <div className="bg-dark pt-30">
       <div className="container text-light mt-20">
         <div className="row">
-          <div className="col-7">
+          <div className="col-md-7">
             {/* 成功通知區 */}
             <div className="success-msg-area pb-16 border-bottom border-light">
               <div className="d-flex align-items-center mb-8">
@@ -21,7 +45,7 @@ export const ReservationSuccessPage: React.FC = () => {
                   />
                 </div>
                 <h3>
-                  恭喜，AA(api 人名)！
+                  恭喜，{customerName}！
                   <br />
                   您已預訂成功
                 </h3>
@@ -46,42 +70,63 @@ export const ReservationSuccessPage: React.FC = () => {
                 </li>
                 <li className="list-unstyled mb-4">
                   <p>姓名</p>
-                  <p>Jessica Ｗang</p>
+                  <p>{customerName}</p>
                 </li>
                 <li className="list-unstyled mb-4">
                   <p>手機號碼</p>
-                  <p>+886 912 345 678</p>
+                  <p>{cellPhoneNumber}</p>
                 </li>
                 <li className="list-unstyled mb-4">
                   <p>電子信箱</p>
-                  <p>jessica@sample.com</p>
+                  <p>{email}</p>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="col-5">
+          <div className="col-md-5">
             {/* 房間資訊卡片 */}
             <div className="me-md-12 me-none card p-8">
-              <p className="text-gray mb-4">預訂參考編號： HH2302183151222</p>
+              <p className="text-gray mb-4">
+                預訂參考編號： {successData.orderId}
+              </p>
               <h3 className="mb-8">即將來的行程</h3>
-              <img className="mb-8" src="..." alt="" />
-              <h6 className="mb-8">尊爵雙人房，1 晚 | 住宿人數：2 位</h6>
+              <img className="mb-8" src={imgUrl} alt="" />
+              <h6 className="mb-8">
+                {roomName}，{bookingDays} 晚 | 住宿人數：{guestCount} 位
+              </h6>
               <ul className="ps-0 mb-16">
                 <li className="list-unstyled mb-2">
-                  入住：6 月 10 日星期二，15:00 可入住
+                  入住：{arrivalDate ? formatDate(arrivalDate) : ""}，15:00
+                  可入住
                 </li>
                 <li className="list-unstyled mb-4">
-                  退房：6 月 11 日星期三，12:00 前退房
+                  退房：{departureDate ? formatDate(departureDate) : ""}，12:00
+                  前退房
                 </li>
-                <li className="list-unstyled">NT$ 10,000</li>
+                <li className="list-unstyled">
+                  NT$ {formatNumberWithCommas(totalPrice)}
+                </li>
               </ul>
               <div className="room-facility mb-16">
                 <div className="border-5 border-start border-primary mb-8">
                   <h5 className="ms-2">房內設施</h5>
                 </div>
                 <div className="facility-card border border-gray p-2">
-                  <CheckListComponent checkListArr={facilityArr} />
+                  <ul className="list-unstyled bg-light rounded p-6 pb-4 row g-0">
+                    {facility.map((item, index) => (
+                      <li className="col-4 mb-2" key={index}>
+                        <div className="d-flex align-items-center">
+                          <Icon
+                            path={mdiCheck}
+                            size={1}
+                            className="text-primary me-2"
+                          />
+                          <span>{item}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
               <div className="spare-parts">
@@ -89,7 +134,20 @@ export const ReservationSuccessPage: React.FC = () => {
                   <h5 className="ms-2">備品提供</h5>
                 </div>
                 <div className="facility-card border border-gray p-2">
-                  <CheckListComponent checkListArr={sparePartsArr} />
+                  <ul className="list-unstyled bg-light rounded p-6 pb-4 row g-0">
+                    {amenity.map((item, index) => (
+                      <li className="col-4 mb-2" key={index}>
+                        <div className="d-flex align-items-center">
+                          <Icon
+                            path={mdiCheck}
+                            size={1}
+                            className="text-primary me-2"
+                          />
+                          <span>{item}</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>

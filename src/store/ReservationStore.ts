@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 type BookingInfo = {
-  roomName: string | null;
+  roomName: string;
   roomTypeId: string | undefined;
   quantity: number;
   arrivalDate: Date;
@@ -26,7 +26,7 @@ const useReservationStore = create<
 >((set, get) => ({
   userId: null, // data
   bookingInfo: {
-    roomName: '',
+    roomName: "",
     roomTypeId: "",
     quantity: 1,
     arrivalDate: new Date(),
