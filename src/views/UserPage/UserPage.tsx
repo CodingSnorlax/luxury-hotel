@@ -4,7 +4,7 @@ import UpdatePWForm from "../../components/UpdatePWForm";
 import UpdateUserForm from "../../components/UpdateUserForm";
 import {
   apiGetUser,
-  apiGetUserOrder,
+  apiGetOwnUserOrder,
   apiDeleteUser,
 } from "../../apis/userApis";
 import { IUser } from "../../interface/User";
@@ -13,6 +13,7 @@ import { formatNumberWithCommas } from "../../units/format";
 import { CheckListComponent } from "../../components/CheckListComponent";
 import { formatInfoTitleList } from "../../units/format";
 import { IOrder } from "../../interface/Order";
+import { Link } from "react-router-dom";
 
 export const UserPage: React.FC = () => {
   const [resetPW, setResetPW] = useState(false);
@@ -29,7 +30,7 @@ export const UserPage: React.FC = () => {
     }
   };
   const getUserOrder = async () => {
-    const res = await apiGetUserOrder();
+    const res = await apiGetOwnUserOrder();
     if (res && res.status) {
       res.data.result.sort((a: IOrder, b: IOrder) => {
         return (
@@ -225,11 +226,12 @@ export const UserPage: React.FC = () => {
                         className="btn btn-outline-primary w-100 me-4 border border-primary"
                         onClick={() => cancelOrder(recentOrder._id)}
                       />
-                      <input
-                        type="button"
-                        value="查看詳情"
+                      <Link
                         className="btn btn-primary text-light w-100"
-                      />
+                        to={`/roomDetail/${recentOrderBookingInfo.roomTypeId._id}`}
+                      >
+                        查看詳情
+                      </Link>
                     </div>
                   </div>
                 )}

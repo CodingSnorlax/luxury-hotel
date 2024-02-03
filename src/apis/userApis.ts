@@ -14,6 +14,7 @@ const apiPatchUserRole = (id: string, { isAdmin }: { isAdmin: boolean }) =>
   req("patch", `/api/v1/user/${id}/role/`, { isAdmin });
 
 const apiGetUserOrder = () => req("get", "/api/v1/order");
+const apiGetOwnUserOrder = () => req("get", "/api/v1/order/own");
 const apiDeleteUser = (id: string) => req("delete", `/api/v1/order/${id}`);
 
 export {
@@ -25,5 +26,6 @@ export {
   apiPutUser,
   apiPatchUserRole,
   apiGetUserOrder,
+  apiGetOwnUserOrder,
   apiDeleteUser,
 };
