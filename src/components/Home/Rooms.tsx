@@ -1,11 +1,15 @@
 // Rooms.jsx
-import React from "react";
 import RoomSlider from "../../components/Home//RoomSlider";
 //img
 import bgLineFill from "../../assets/img/bgLineFill.svg";
 import bgGradient from "../../assets/img/bgGradient.svg";
 
-const Rooms = ({ rooms }) => {
+import { Room } from "../../interface/Room";
+interface RoomsProps {
+  rooms: Room[];
+}
+
+const Rooms: React.FC<RoomsProps> = ({ rooms }) => {
   return (
     <section className="px-0 z-n2 bg-dark p-120 container-fluid position-relative">
       <RoomSlider rooms={rooms} />

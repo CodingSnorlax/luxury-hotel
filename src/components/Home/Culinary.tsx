@@ -1,14 +1,15 @@
-//add component Food
-import React from "react";
-import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
 //img
 import bgLineLeft from "../../assets/img/bgLineLeft.svg";
+import { TCulinary } from "../../interface/Culinary";
 
-const Culinary = ({ culinaries }) => {
+interface CulinaryProps {
+  culinaries: TCulinary[];
+}
+
+const Culinary: React.FC<CulinaryProps> = ({ culinaries }) => {
   return (
     <section className="p-120">
       {/* bg */}
@@ -36,7 +37,7 @@ const Culinary = ({ culinaries }) => {
         <div className="container-fluid">
           <Swiper
             loop={true}
-            pagination={true}
+            // pagination={true}
             slidesPerView={1}
             centeredSlides={true}
             spaceBetween={30}
@@ -55,15 +56,13 @@ const Culinary = ({ culinaries }) => {
                 spaceBetween: 20,
               },
             }}
-            centeredSlides={true}
-            grabCursor={true}
             pagination={{
               clickable: true,
             }}
             // modules={[Pagination]}
             className="mySwiperFood"
           >
-            {culinaries.map((culinary, index) => (
+            {culinaries.map((culinary, index: number) => (
               <SwiperSlide key={index}>
                 <div
                   className="card mb-3 border border-0"

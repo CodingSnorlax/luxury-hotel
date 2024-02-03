@@ -1,13 +1,14 @@
 import { useState, forwardRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import LogoImg from "../../assets/img/logoWhite.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useLoginStore from "../../store/LoginStore";
 import { Icon as Iconify } from "@iconify/react";
 
 export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const handleToggleOffcanvas = () => setShowOffcanvas(!showOffcanvas);
+  const navigate = useNavigate();
 
   // 設定 Navbar 背景透明
   const [isTransparent, setIsTransparent] = useState(false);
@@ -37,6 +38,24 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
   //直接取目前使用者登入狀態
   const isLogin = useLoginStore((state) => state.getLoginData().loginStatus);
   const userName = useLoginStore((state) => state.getLoginData().user.name);
+
+  //切換到客房旅宿/立即訂房頁面 & 選單關閉
+  const switchToRoomDetailPage = () => {
+    navigate("/roomTypes");
+    handleToggleOffcanvas();
+  };
+
+  //切換登入頁面 & 選單關閉
+  const switchToLoginPage = () => {
+    navigate("/login");
+    handleToggleOffcanvas();
+  };
+
+  //切換會員頁面 & 選單關閉
+  const switchToUserPage = () => {
+    navigate("/user");
+    handleToggleOffcanvas();
+  };
 
   return (
     <>
@@ -74,7 +93,10 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
             </li>
             <li className="me-3">
               {isLogin ? (
-                <Link className="px-4 text-light text-decoration-none" to="/user">
+                <Link
+                  className="px-4 text-light text-decoration-none"
+                  to="/user"
+                >
                   <Iconify icon="gg:profile" className="me-2 fs-4 text-light" />
                   {userName}
                 </Link>
@@ -88,7 +110,9 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
               )}
             </li>
             <li className="me-3">
-              <button className="btn btn-primary text-light">立即訂房</button>
+              <Link className="btn btn-primary w-100" to="/roomTypes">
+                立即訂房
+              </Link>
             </li>
           </ul>
 
@@ -101,34 +125,50 @@ export const NavbarComponent = forwardRef<HTMLDivElement>((_, ref) => {
             aria-labelledby="offcanvasNavbarLabel"
           >
             <div className="offcanvas-header d-flex justify-content-end">
-              <button
-                type="button"
-                className="bg-dark text-light"
+              <Iconify
+                icon="maki:cross"
+                className="me-2 fs-4 text-light"
                 onClick={() => setShowOffcanvas(false)}
-              >
-                X
-              </button>
+              />
             </div>
             <div className="offcanvas-body">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
-                  <Link
-                    className="nav-link active text-light text-center text-decoration-none"
-                    to="/roomTypes"
+                  <button
+                    className="nav-link active text-light text-center text-decoration-none w-100"
+                    onClick={switchToRoomDetailPage}
                   >
                     客房旅宿
-                  </Link>
+                  </button>
                 </li>
                 <li className="nav-item">
-                  <Link
-                    className="nav-link active text-light text-center text-decoration-none"
-                    to="/login"
-                  >
-                    會員登入
-                  </Link>
+                  {isLogin ? (
+                    <button
+                      className="px-4 text-light text-decoration-none"
+                      onClick={switchToUserPage}
+                    >
+                      <Iconify
+                        icon="gg:profile"
+                        className="me-2 fs-4 text-light"
+                      />
+                      {userName}
+                    </button>
+                  ) : (
+                    <button
+                      className="nav-link active text-light text-center text-decoration-none w-100"
+                      onClick={switchToLoginPage}
+                    >
+                      會員登入
+                    </button>
+                  )}
                 </li>
                 <li className="nav-item dropdown">
-                  <button className="btn btn-primary w-100">立即訂房</button>
+                  <button
+                    className="nav-link active text-light text-center text-decoration-none w-100"
+                    onClick={switchToRoomDetailPage}
+                  >
+                    立即訂房
+                  </button>
                 </li>
               </ul>
             </div>
