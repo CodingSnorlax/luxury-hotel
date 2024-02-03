@@ -3,8 +3,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 //img
 import bgLineLeft from "../../assets/img/bgLineLeft.svg";
+import { Culinary } from "../../interface/Culinary";
 
-const Culinary = ({ culinaries }) => {
+interface CulinaryProps {
+  culinaries: Culinary[]
+}
+
+const Culinary: React.FC<CulinaryProps> = ({ culinaries }) => {
   return (
     <section className="p-120">
       {/* bg */}
@@ -32,7 +37,7 @@ const Culinary = ({ culinaries }) => {
         <div className="container-fluid">
           <Swiper
             loop={true}
-            pagination={true}
+            // pagination={true}
             slidesPerView={1}
             centeredSlides={true}
             spaceBetween={30}
@@ -51,8 +56,6 @@ const Culinary = ({ culinaries }) => {
                 spaceBetween: 20,
               },
             }}
-            centeredSlides={true}
-            grabCursor={true}
             pagination={{
               clickable: true,
             }}

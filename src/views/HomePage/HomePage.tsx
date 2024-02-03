@@ -28,24 +28,9 @@ import Trans from "../../components/Home/Trans";
 import "./HomePage.scss";
 
 import { Room as RoomModel } from "../../interface/Room";
+import { Culinary as CulinaryModel } from "../../interface/Culinary";
+import { News as NewsModel } from "../../interface/News";
 
-interface News {
-  _id: string;
-  title: string;
-  description: string;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
-}
-interface Culinary {
-  _id: string;
-  title: string;
-  description: string;
-  diningTime: string;
-  image: string;
-  createdAt: string;
-  updatedAt: string;
-}
 // interface Room {
 //   _id: string;
 //   name: string;
@@ -64,8 +49,8 @@ interface Culinary {
 // }
 
 export const HomePage: React.FC = () => {
-  const [news, setNews] = useState<News[]>([]);
-  const [culinaries, setCulinaries] = useState<Culinary[]>([]);
+  const [news, setNews] = useState<NewsModel[]>([]);
+  const [culinaries, setCulinaries] = useState<CulinaryModel[]>([]);
   const [rooms, setRooms] = useState<RoomModel[]>([]);
 
   useEffect(() => {
