@@ -1,6 +1,3 @@
-//add component AboutUs
-import React from "react";
-
 //img
 import bgAbout from "../../assets/img/bgAbout.png";
 

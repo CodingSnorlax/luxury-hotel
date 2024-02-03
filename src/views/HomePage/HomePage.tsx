@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import { Link } from "react-router-dom";
 import axios from "axios";
-import useAppleStore from "../../store/appleStore";
-import { Link } from "react-router-dom";
-//
 // import { Swiper, SwiperSlide } from "swiper/react";
 // import "swiper/css";
 // import "swiper/css/pagination";
@@ -17,7 +14,7 @@ import bgDot from "../../assets/img/bgDot.svg";
 // import imgMap from "../../assets/img/imgMap.png";
 
 //bg
-import bgLineLeft from "../../assets/img/bgLineLeft.svg";
+// import bgLineLeft from "../../assets/img/bgLineLeft.svg";
 import bgLineLeft2 from "../../assets/img/bgLineLeft2.svg";
 
 //components
@@ -29,6 +26,8 @@ import Culinary from "../../components/Home/Culinary";
 import Trans from "../../components/Home/Trans";
 
 import "./HomePage.scss";
+
+import { Room as RoomModel } from "../../interface/Room";
 
 interface News {
   _id: string;
@@ -47,27 +46,27 @@ interface Culinary {
   createdAt: string;
   updatedAt: string;
 }
-interface Room {
-  _id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  imageUrlList: string[];
-  areaInfo: string;
-  bedInfo: {
-    type: string;
-    quantity: number;
-  };
-  maxPeople: number;
-  minPeople: number;
-  price: number;
-  status: number;
-}
+// interface Room {
+//   _id: string;
+//   name: string;
+//   description: string;
+//   imageUrl: string;
+//   imageUrlList: string[];
+//   areaInfo: string;
+//   bedInfo: {
+//     type: string;
+//     quantity: number;
+//   };
+//   maxPeople: number;
+//   minPeople: number;
+//   price: number;
+//   status: number;
+// }
 
 export const HomePage: React.FC = () => {
   const [news, setNews] = useState<News[]>([]);
   const [culinaries, setCulinaries] = useState<Culinary[]>([]);
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<RoomModel[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

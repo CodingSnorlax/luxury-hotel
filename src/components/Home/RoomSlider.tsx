@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -10,7 +9,12 @@ import { Pagination } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 
-const RoomSlider = ({ rooms }) => {
+import { Room } from "../../interface/Room";
+interface RoomsProps {
+  rooms: Room[];
+}
+
+const RoomSlider: React.FC<RoomsProps> = ({ rooms }) => {
   return (
     <div className="container-fluid d-flex flex-column flex-md-row">
       <ImageSlider rooms={rooms} />
@@ -19,7 +23,7 @@ const RoomSlider = ({ rooms }) => {
   );
 };
 
-const ImageSlider = ({ rooms }) => {
+const ImageSlider: React.FC<RoomsProps> = ({ rooms }) => {
   return (
     <div className="col-12 col-md-6">
       <Swiper
@@ -28,7 +32,7 @@ const ImageSlider = ({ rooms }) => {
         modules={[Pagination]}
         className="mySwiperRooms"
       >
-        {rooms.map((room, index) => (
+        {rooms.map((room, index: number) => (
           <SwiperSlide key={index}>
             <img
               className="z-3 w-100 object-fit-cover border-start rounded-end-2 mb-4"
@@ -42,7 +46,7 @@ const ImageSlider = ({ rooms }) => {
   );
 };
 
-const TextSlider = ({ rooms }) => {
+const TextSlider: React.FC<RoomsProps> = ({ rooms }) => {
   return (
     <div className="col-12 col-md-6 p-0 p-lg-4 d-flex justify-content-end align-items-end">
       <Swiper
@@ -50,7 +54,7 @@ const TextSlider = ({ rooms }) => {
         className="mySwiperRooms"
         controller={{ control: null }}
       >
-        {rooms.map((room, index) => (
+        {rooms.map((room, index: number) => (
           <SwiperSlide key={index}>
             <div className="d-flex flex-column justify-content-end">
               <h4 className="fs-2 text-light mb-4">{room.name}</h4>

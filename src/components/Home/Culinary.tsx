@@ -1,10 +1,6 @@
-//add component Food
-import React from "react";
-import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
 //img
 import bgLineLeft from "../../assets/img/bgLineLeft.svg";
 
@@ -63,7 +59,7 @@ const Culinary = ({ culinaries }) => {
             // modules={[Pagination]}
             className="mySwiperFood"
           >
-            {culinaries.map((culinary, index) => (
+            {culinaries.map((culinary, index: number) => (
               <SwiperSlide key={index}>
                 <div
                   className="card mb-3 border border-0"

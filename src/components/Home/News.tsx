@@ -1,5 +1,3 @@
-//add News component
-import React, { useState, useEffect } from "react";
 //img
 import bgDot from "../../assets/img/bgDot.svg";
 
@@ -7,7 +5,7 @@ const News = ({ news }) => {
   return (
     <section className="bg-brown">
       <div className="container p-120">
-        {news.map((news, index) => (
+        {news.map((news, index: number) => (
           <div className="row container-fluid" key={index}>
             <div className="col-12 col-md-2 text-primary d-flex align-items-center">
               {index === 0 && (
