@@ -1,12 +1,12 @@
 //img
 import bgDot from "../../assets/img/bgDot.svg";
-import { News } from "../../interface/News";
+import { TNews } from "../../interface/News";
 
 interface NewsProps {
-  news: News[]
+  news: TNews[];
 }
 
-const News:React.FC<NewsProps> = ({ news }) => {
+const News: React.FC<NewsProps> = ({ news }) => {
   return (
     <section className="bg-brown">
       <div className="container p-120">

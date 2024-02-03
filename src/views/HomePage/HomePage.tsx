@@ -28,8 +28,8 @@ import Trans from "../../components/Home/Trans";
 import "./HomePage.scss";
 
 import { Room as RoomModel } from "../../interface/Room";
-import { Culinary as CulinaryModel } from "../../interface/Culinary";
-import { News as NewsModel } from "../../interface/News";
+import { TCulinary as CulinaryModel } from "../../interface/Culinary";
+import { TNews as NewsModel } from "../../interface/News";
 
 // interface Room {
 //   _id: string;

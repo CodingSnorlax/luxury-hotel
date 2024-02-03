@@ -1,4 +1,4 @@
-export type Culinary = {
+export type TCulinary = {
   _id: string;
   title: string;
   description: string;

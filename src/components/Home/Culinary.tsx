@@ -3,10 +3,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 //img
 import bgLineLeft from "../../assets/img/bgLineLeft.svg";
-import { Culinary } from "../../interface/Culinary";
+import { TCulinary } from "../../interface/Culinary";
 
 interface CulinaryProps {
-  culinaries: Culinary[]
+  culinaries: TCulinary[];
 }
 
 const Culinary: React.FC<CulinaryProps> = ({ culinaries }) => {
