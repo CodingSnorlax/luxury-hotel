@@ -6,9 +6,9 @@ import bgDot from "../../assets/img/bgDot.svg";
 const News = ({ news }) => {
   return (
     <section className="bg-brown">
-      <div className="container p-120">
+      <div className="container p-120 m-0">
         {news.map((news, index) => (
-          <div className="row container-fluid" key={index}>
+          <div className="row m-0 p-0 container-fluid" key={index}>
             <div className="col-12 col-md-2 text-primary d-flex align-items-center">
               {index === 0 && (
                 <div className="text-start">
@@ -18,10 +18,10 @@ const News = ({ news }) => {
                 </div>
               )}
             </div>
-            <div className="col-12 col-md-10 text-light d-flex align-items-center mb-4">
+            <div className="col-12 col-md-10 text-light d-flex align-items-center mb-4 mt-4">
               <div
                 className="card mb-3 border border-0"
-                style={{ maxWidth: "100%", height: "294px" }}
+                style={{ maxWidth: "100%", minHeight: "294px" }}
               >
                 <div className="row g-0 bg-brown">
                   <div className="col-md-6">
@@ -41,7 +41,7 @@ const News = ({ news }) => {
                     </div>
                     {/* bg */}
                     {index === 0 && (
-                      <div className="d-none d-lg-block position-absolute top-0 start-100 translate-middle overflow-hidden">
+                      <div className="d-none d-xl-block position-absolute top-0 start-100 translate-middle overflow-hidden">
                         <img src={bgDot} alt="bgDot" />
                       </div>
                     )}

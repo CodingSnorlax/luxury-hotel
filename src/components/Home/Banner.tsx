@@ -13,7 +13,7 @@ const slidesData = [
     title: "享樂酒店",
     subtitle: "Enjoyment Luxury Hotel",
     location: "高雄",
-    description: "我們致力於為您提供無與倫比的奢華體驗與優質服務",
+    description: "我們致力於為您提供無與倫比的奢華體驗與優質服務!",
     buttonLink: "/roomTypes",
     buttonText: "立即訂房",
   },
@@ -36,6 +36,7 @@ const Banner = () => {
         className="banner-box mySwiperBanner"
         pagination={true}
         modules={[Pagination]}
+        slidesPerView={1}
       >
         {slidesData.map((slide, index) => (
           <SwiperSlide key={index}>
@@ -47,10 +48,10 @@ const Banner = () => {
             <div className="carousel-style position-absolute container-fluid container justify-content-between">
               <div className="d-flex justify-content-between flex-column flex-lg-row  banner-text">
                 <div className="col-12 col-lg-5 text-primary d-flex align-items-center">
-                  <div className="text-center text-lg-start w-100">
+                  <div className="position-relative text-center text-lg-start w-100 d-flex flex-column align-items-center mb-4">
                     <h4 className="fs-1">{slide.title}</h4>
                     <p className="fs-4">{slide.subtitle}</p>
-                    <p className="gradient-underline mt-10"></p>
+                    <p className="gradient-underline-2 mt-10"></p>
                   </div>
                 </div>
                 <div className="col-12 col-lg-6 text-light d-flex align-items-center border-top border-end rounded-5 banner-right">
@@ -59,7 +60,7 @@ const Banner = () => {
                     <h3 className="fs-100">豪華住宿之選</h3>
                     <p className="fs-2">{slide.description}</p>
                     <Link
-                      className="btn btn-light col-12 d-flex justify-content-end align-item-center fw-bold fs-4 d-flex mt-10 p-10"
+                      className="btn-brown btn btn-light col-12 d-flex justify-content-end align-item-center fw-bold fs-4 d-flex mt-10 p-2 p-xl-10"
                       to={slide.buttonLink}
                     >
                       {slide.buttonText}

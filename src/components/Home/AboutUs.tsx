@@ -26,9 +26,12 @@ const AboutUs = () => {
           /> */}
         {/* <div className="position-absolute top-50 start-100 translate-middle"> */}
         <div className="container">
-          <div className="row position-relative" style={{ bottom: "-80px" }}>
-            <div className="col-2"></div>
-            <div className="col-10 bg-primary brown-box">
+          <div
+            className="m-2 m-md-0 row position-relative"
+            style={{ bottom: "-80px" }}
+          >
+            <div className="col-2 col-12"></div>
+            <div className="col-12 col-lg-10 bg-primary brown-box">
               <div className="brown-box-info">
                 <div className="d-flex justify-content-start align-item-center mb-80">
                   <h4 className="fs-2 text-light">

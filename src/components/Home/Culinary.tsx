@@ -16,7 +16,7 @@ const Culinary = ({ culinaries }) => {
         <img
           src={bgLineLeft}
           alt="bgLineLeft"
-          className="d-none d-lg-block position-absolute start-0"
+          className="d-none d-xxl-block position-absolute start-0"
         />
       </div>
       <div className="position-relative container text-primary d-flex align-items-center">
