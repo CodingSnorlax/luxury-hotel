@@ -1,7 +1,7 @@
 //img
 import bgDot from "../../assets/img/bgDot.svg";
 import { TNews } from "../../interface/News";
-import './home.scss'
+import './../../views/HomePage/HomePage.scss'
 
 interface NewsProps {
   news: TNews[];

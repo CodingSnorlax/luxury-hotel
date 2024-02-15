@@ -67,7 +67,7 @@
     border-left: 1px solid var(--Neutral-0, #fff);
     background: linear-gradient(180deg, rgba(20, 15, 10, 0.8) 0%, rgba(190, 156, 124, 0.8) 100%);
     backdrop-filter: blur(10px);
-    min-width: 1044px;
+    max-width: 1044px;
     height: 672px;
     .brown-box-info{
       padding: 80px;
@@ -156,4 +156,9 @@
 .bg-blur{
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+}
+
+.dot-img {
+  top: 0;
+  right: -140px;
 }
