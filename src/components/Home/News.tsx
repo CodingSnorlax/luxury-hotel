@@ -1,6 +1,7 @@
 //img
 import bgDot from "../../assets/img/bgDot.svg";
 import { TNews } from "../../interface/News";
+import './home.scss'
 
 interface NewsProps {
   news: TNews[];
@@ -8,7 +9,7 @@ interface NewsProps {
 
 const News: React.FC<NewsProps> = ({ news }) => {
   return (
-    <section className="bg-brown">
+    <section className="bg-brown news-area">
       <div className="container p-120">
         {news.map((news, index: number) => (
           <div className="row container-fluid" key={index}>
@@ -44,7 +45,7 @@ const News: React.FC<NewsProps> = ({ news }) => {
                     </div>
                     {/* bg */}
                     {index === 0 && (
-                      <div className="d-none d-lg-block position-absolute top-0 start-100 translate-middle overflow-hidden">
+                      <div className="d-none d-lg-block position-absolute dot-img translate-middle overflow-hidden">
                         <img src={bgDot} alt="bgDot" />
                       </div>
                     )}
