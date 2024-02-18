@@ -41,11 +41,11 @@ export const LoginPage = ({ navbarHeight }: Props) => {
             _id,
           },
         });
-
+        alert("登入成功");
         //轉回首頁
         navigate("/");
       }
-    } catch (err) {
+    } catch (err: any) {
       //登入失敗就清空資料
       store.setLoginData({
         loginStatus: null,
@@ -60,7 +60,7 @@ export const LoginPage = ({ navbarHeight }: Props) => {
           _id: "",
         },
       });
-      alert("登入失敗!");
+      alert(err.response.data.message);
     }
   };
   return (

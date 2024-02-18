@@ -29,6 +29,10 @@ const signUpUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
         value: true,
         message: "請輸入姓名",
       },
+      minLength: {
+        value: 2,
+        message: "姓名至少需 2 個字元",
+      },
     },
   },
   {
@@ -40,6 +44,10 @@ const signUpUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
       required: {
         value: true,
         message: "請輸入電話",
+      },
+      pattern: {
+        value: /^09\d{8}$/,
+        message: "電話格式錯誤",
       },
     },
   },

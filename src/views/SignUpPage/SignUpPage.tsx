@@ -39,8 +39,11 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
     };
     try {
       await apiSignup(data);
+      alert("注冊成功，請重新登入");
       navigate("/login");
-    } catch (err) {}
+    } catch (err: any) {
+      alert(err.response.data.message);
+    }
   };
 
   return (
