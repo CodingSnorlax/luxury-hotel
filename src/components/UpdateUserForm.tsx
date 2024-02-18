@@ -10,8 +10,8 @@ import {
 import { IUser } from "../interface/User";
 import { countyAndCityByZipCode } from "../units/zipcodes";
 import { apiGetUser, apiPutUser } from "../apis/userApis";
-import Toasts from "../components/Toasts";
 import Loading from "../components/Loading";
+import useToastStore from "../store/ToastsStore";
 
 type InputName =
   | "name"
@@ -162,9 +162,8 @@ const UpdateUserForm: React.FC = () => {
     setCounty(e.target.value);
   };
 
-  const [show, setShow] = useState(false);
+  const toastStore = useToastStore((state) => state);
   const [loading, setLoading] = useState(false);
-  const [toastsMessage, setToastsMessage] = useState("");
   const onSubmit = (data: TUpdateUser) => {
     setLoading(true);
     const { name, phone, year, month, day, county, city, detail } = data;
@@ -178,14 +177,18 @@ const UpdateUserForm: React.FC = () => {
         console.log(userInfo);
         const res = await apiPutUser(userInfo);
         if (res && res.status) {
-          setShow(true);
-          setToastsMessage("基本資料已更新");
           setLoading(false);
+          toastStore.setToastData({
+            show: true,
+            toastMessage: "基本資料已更新",
+          });
         }
       } catch (error) {
-        setShow(true);
-        setToastsMessage("基本資料更新失敗");
         setLoading(false);
+        toastStore.setToastData({
+          show: true,
+          toastMessage: "基本資料更新失敗",
+        });
       }
     };
     updateUser();
@@ -235,10 +238,6 @@ const UpdateUserForm: React.FC = () => {
       );
     }
   }, [updateUser, setValue]);
-
-  useEffect(() => {
-    setShow(false);
-  }, [show]);
 
   return (
     <>
@@ -380,7 +379,6 @@ const UpdateUserForm: React.FC = () => {
           {!loading && "儲存設定"}
         </button>
       </form>
-      <Toasts isVisible={show} message={toastsMessage} />
     </>
   );
 };

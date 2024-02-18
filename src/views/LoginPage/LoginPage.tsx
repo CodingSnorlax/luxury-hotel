@@ -4,6 +4,7 @@ import LoginForm from "../../components/LoginForm";
 import { PWData } from "../../interface/Form";
 import { useNavigate } from "react-router-dom";
 import useLoginStore from "../../store/LoginStore";
+import useToastStore from "../../store/ToastsStore";
 import { apiLogin } from "../../apis/userApis";
 
 interface Props {
@@ -12,7 +13,8 @@ interface Props {
 export const LoginPage = ({ navbarHeight }: Props) => {
   const navigate = useNavigate();
   // 取得本頁面所有資料，加入狀態管理層
-  const store = useLoginStore((state) => state);
+  const loginStore = useLoginStore((state) => state);
+  const toastStore = useToastStore((state) => state);
 
   const handleLogin = async (PWData: PWData) => {
     try {
@@ -28,7 +30,7 @@ export const LoginPage = ({ navbarHeight }: Props) => {
 
       if (status) {
         //登入成功就帶資料回去
-        store.setLoginData({
+        loginStore.setLoginData({
           loginStatus: status,
           token: token,
           user: {
@@ -41,13 +43,16 @@ export const LoginPage = ({ navbarHeight }: Props) => {
             _id,
           },
         });
-        alert("登入成功");
+        toastStore.setToastData({
+          show: true,
+          toastMessage: "登入成功",
+        });
         //轉回首頁
         navigate("/");
       }
     } catch (err: any) {
       //登入失敗就清空資料
-      store.setLoginData({
+      loginStore.setLoginData({
         loginStatus: null,
         token: "",
         user: {
@@ -60,7 +65,10 @@ export const LoginPage = ({ navbarHeight }: Props) => {
           _id: "",
         },
       });
-      alert(err.response.data.message);
+      toastStore.setToastData({
+        show: true,
+        toastMessage: err.response.data.message,
+      });
     }
   };
   return (

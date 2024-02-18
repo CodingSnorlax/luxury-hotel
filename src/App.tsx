@@ -11,6 +11,8 @@ import { RoomTypesPage } from "./views/RoomTypesPage/RoomTypesPage";
 import { RoomDetailPage } from "./views/RoomDetailPage/RoomDetailPage";
 import { ReservationPage } from "./views/ReservationPage/ReservationPage";
 import { ReservationSuccessPage } from "./views/ReservationSuccessPage/ReservationSuccessPage";
+import Toasts from "./components/Toasts";
+import useToastStore from "./store/ToastsStore";
 
 export const App: React.FC = () => {
   const [navbarHeight, setnavbarHeight] = useState(0);
@@ -18,6 +20,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     setnavbarHeight(navbarRef.current?.clientHeight as number);
   }, [navbarRef]);
+
+  const toastStore = useToastStore((state) => state);
   return (
     <>
       <div className="App">
@@ -39,11 +43,15 @@ export const App: React.FC = () => {
             path="/roomDetail/:roomTypeId"
             element={<RoomDetailPage navbarHeight={navbarHeight} />}
           />
-          <Route path="/reservation/:roomTypeId" element={<ReservationPage />} />
+          <Route
+            path="/reservation/:roomTypeId"
+            element={<ReservationPage />}
+          />
           <Route path="/success" element={<ReservationSuccessPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <FooterComponent />
+        <Toasts isVisible={toastStore.show} message={toastStore.toastMessage} />
       </div>
     </>
   );

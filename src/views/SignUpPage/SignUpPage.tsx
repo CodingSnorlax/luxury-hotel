@@ -7,11 +7,14 @@ import { UserData } from "../../interface/Form";
 import { useNavigate } from "react-router-dom";
 import { zipCodeByCountryAndCity } from "../../units/zipcodes";
 import { apiSignup } from "../../apis/userApis";
+import useToastStore from "../../store/ToastsStore";
 
 interface Props {
   navbarHeight: number;
 }
 export const SignUpPage = ({ navbarHeight }: Props) => {
+  const toastStore = useToastStore((state) => state);
+
   // 目前進度
   const [progressNum, setProgressNum] = useState(1);
 
@@ -39,10 +42,16 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
     };
     try {
       await apiSignup(data);
-      alert("注冊成功，請重新登入");
+      toastStore.setToastData({
+        show: true,
+        toastMessage: "注冊成功，請重新登入",
+      });
       navigate("/login");
     } catch (err: any) {
-      alert(err.response.data.message);
+      toastStore.setToastData({
+        show: true,
+        toastMessage: err.response.data.message,
+      });
     }
   };
 
