@@ -1,4 +1,5 @@
 import "./LoginPage.scss";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "../../components/LoginForm";
 import { PWData } from "../../interface/Form";
@@ -11,12 +12,15 @@ interface Props {
   navbarHeight: number;
 }
 export const LoginPage = ({ navbarHeight }: Props) => {
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   // 取得本頁面所有資料，加入狀態管理層
   const loginStore = useLoginStore((state) => state);
   const toastStore = useToastStore((state) => state);
 
   const handleLogin = async (PWData: PWData) => {
+    setLoading(true);
     try {
       const res = await apiLogin(PWData);
       if (!res) return;
@@ -43,6 +47,7 @@ export const LoginPage = ({ navbarHeight }: Props) => {
             _id,
           },
         });
+        setLoading(false);
         toastStore.setToastData({
           show: true,
           toastMessage: "登入成功",
@@ -65,6 +70,7 @@ export const LoginPage = ({ navbarHeight }: Props) => {
           _id: "",
         },
       });
+      setLoading(false);
       toastStore.setToastData({
         show: true,
         toastMessage: err.response.data.message,
@@ -88,7 +94,7 @@ export const LoginPage = ({ navbarHeight }: Props) => {
           <div className="content-wrap px-5 px-lg-0">
             <p className="text-primary fw-bold mb-2">享樂酒店，誠摯歡迎</p>
             <h2 className="display-5 mb-4">立即開始旅程</h2>
-            <LoginForm handleLogin={handleLogin} />
+            <LoginForm handleLogin={handleLogin} loading={loading} />
             <p className="d-inline me-2">沒有會員嗎？</p>
             <Link className="text-primary" to="/signup">
               前往註冊
