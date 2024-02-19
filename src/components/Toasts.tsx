@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { Toast } from "bootstrap";
+import useToastStore from "../store/ToastsStore";
 interface ToastsProps {
   isVisible: boolean;
   message: string;
 }
 
 function Toasts({ isVisible, message }: ToastsProps) {
+  const store = useToastStore((state) => state);
   const toastRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -14,9 +16,13 @@ function Toasts({ isVisible, message }: ToastsProps) {
       toastInstanceRef.show();
       setTimeout(() => {
         toastInstanceRef.hide();
+        store.setToastData({
+          show: false,
+          toastMessage: "",
+        });
       }, 3000);
     }
-  }, [isVisible]);
+  }, [isVisible, store]);
 
   return (
     <div className="position-fixed bottom-0 end-0 p-3" style={{ zIndex: 11 }}>

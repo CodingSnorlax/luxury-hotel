@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IReactHookFormInput } from "../interface/ReactHookForm";
 import { apiGetUser, apiPutUser } from "../apis/userApis";
 import Loading from "../components/Loading";
-import Toasts from "../components/Toasts";
+import useToastStore from "../store/ToastsStore";
 
 type InputName = "oldPassword" | "newPassword" | "checkNewPassword";
 type TUpdatePW = Record<InputName, string>;
@@ -72,9 +72,8 @@ function UpdatePWForm() {
     reset,
   } = useForm<TUpdatePW>();
 
-  const [show, setShow] = useState(false);
+  const toastStore = useToastStore((state) => state);
   const [loading, setLoading] = useState(false);
-  const [toastsMessage, setToastsMessage] = useState("");
   const onSubmit = async (data: TUpdatePW) => {
     setLoading(true);
     try {
@@ -94,21 +93,21 @@ function UpdatePWForm() {
           newPassword: data.newPassword,
         };
         await apiPutUser(submitData);
-        setShow(true);
         setLoading(false);
-        setToastsMessage("密碼已更新");
+        toastStore.setToastData({
+          show: true,
+          toastMessage: "密碼已更新",
+        });
       }
     } catch (err) {
-      setShow(true);
       setLoading(false);
-      setToastsMessage("密碼更新失敗");
+      toastStore.setToastData({
+        show: true,
+        toastMessage: "密碼更新失敗",
+      });
     }
     reset();
   };
-
-  useEffect(() => {
-    setShow(false);
-  }, [show]);
 
   return (
     <>
@@ -141,7 +140,6 @@ function UpdatePWForm() {
           {!loading && "儲存設定"}
         </button>
       </form>
-      <Toasts isVisible={show} message={toastsMessage} />
     </>
   );
 }

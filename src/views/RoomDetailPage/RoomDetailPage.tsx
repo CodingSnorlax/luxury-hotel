@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import "./RoomDetailPage.scss";
 import { useState, useEffect, useMemo } from "react";
 import { Room } from "../../interface/Room";
@@ -82,7 +82,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
 
   // 取得本頁面所有資料，加入狀態管理層
   const store = useReservationStore((state) => state);
-  const loginStore = useLoginStore((state) => state)
+  const loginStore = useLoginStore((state) => state);
 
   const handleSubmit = () => {
     //取使用者目前登入情形
@@ -93,7 +93,7 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
       store.setReservationData({
         userId: loginStore.getLoginData().user._id,
         bookingInfo: {
-          roomName: room?.name ?? '',
+          roomName: room?.name ?? "",
           roomTypeId: pageParams.roomTypeId,
           quantity: 2,
           arrivalDate: dateRange[0].startDate,
@@ -258,9 +258,12 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
                 );
               })}
             </Swiper>
-            <button className="btn text-primary fw-bold border border-primary bg-bg seeMoreBtn">
+            <Link
+              className="btn text-primary fw-bold border border-primary bg-bg seeMoreBtn"
+              to="/roomTypes"
+            >
               看更多
-            </button>
+            </Link>
           </section>
           <section className="img-wrap rounded-5 overflow-hidden m-3 m-lg-20 d-none d-lg-block">
             <div className="d-flex h-100">
@@ -278,9 +281,12 @@ export const RoomDetailPage = ({ navbarHeight }: Props) => {
                 })}
               </div>
             </div>
-            <button className="btn text-primary fw-bold border border-primary bg-bg seeMoreBtn">
+            <Link
+              className="btn text-primary fw-bold border border-primary bg-bg seeMoreBtn"
+              to="/roomTypes"
+            >
               看更多
-            </button>
+            </Link>
           </section>
           <section className="content py-10 py-lg-30">
             <div className="row justify-content-center g-0">
