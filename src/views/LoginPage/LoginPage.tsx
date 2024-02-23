@@ -5,6 +5,7 @@ import { PWData } from "../../interface/Form";
 import { useNavigate } from "react-router-dom";
 import useLoginStore from "../../store/LoginStore";
 import { apiLogin } from "../../apis/userApis";
+import LoginBg from "../../assets/img/Login_BG.png";
 
 interface Props {
   navbarHeight: number;
@@ -68,7 +69,7 @@ export const LoginPage = ({ navbarHeight }: Props) => {
       <div className="col-6 d-none d-lg-block">
         <img
           className="mainImg w-100 h-100"
-          src="/src/assets/img/Login_BG.png"
+          src={LoginBg}
           alt=""
         />
       </div>

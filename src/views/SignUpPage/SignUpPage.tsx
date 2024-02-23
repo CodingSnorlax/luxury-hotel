@@ -7,6 +7,7 @@ import { UserData } from "../../interface/Form";
 import { useNavigate } from "react-router-dom";
 import { zipCodeByCountryAndCity } from "../../units/zipcodes";
 import { apiSignup } from "../../apis/userApis";
+import LoginBg from "../../assets/img/Login_BG.png";
 
 interface Props {
   navbarHeight: number;
@@ -40,17 +41,15 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
     try {
       await apiSignup(data);
       navigate("/login");
-    } catch (err) {}
+    } catch (err) {
+      console.log(err)
+    }
   };
 
   return (
     <div className="row g-0">
       <div className="col-6 d-none d-lg-block">
-        <img
-          className="mainImg w-100 h-100"
-          src="/src/assets/img/Login_BG.png"
-          alt=""
-        />
+        <img className="mainImg w-100 h-100" src={LoginBg} alt="" />
       </div>
       <div
         className="col-12 col-lg-6 bg-dark text-white"
