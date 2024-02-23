@@ -1,13 +1,17 @@
-//add News component
-import React, { useState, useEffect } from "react";
 //img
 import bgDot from "../../assets/img/bgDot.svg";
+import { TNews } from "../../interface/News";
+import './../../views/HomePage/HomePage.scss'
 
-const News = ({ news }) => {
+interface NewsProps {
+  news: TNews[];
+}
+
+const News: React.FC<NewsProps> = ({ news }) => {
   return (
-    <section className="bg-brown">
+    <section className="bg-brown news-area">
       <div className="container p-120">
-        {news.map((news, index) => (
+        {news.map((news, index: number) => (
           <div className="row container-fluid" key={index}>
             <div className="col-12 col-md-2 text-primary d-flex align-items-center">
               {index === 0 && (
@@ -41,7 +45,7 @@ const News = ({ news }) => {
                     </div>
                     {/* bg */}
                     {index === 0 && (
-                      <div className="d-none d-lg-block position-absolute top-0 start-100 translate-middle overflow-hidden">
+                      <div className="d-none d-lg-block position-absolute dot-img translate-middle overflow-hidden">
                         <img src={bgDot} alt="bgDot" />
                       </div>
                     )}

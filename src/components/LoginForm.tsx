@@ -2,9 +2,11 @@ import { useForm } from "react-hook-form";
 import { IReactHookFormInput } from "../interface/ReactHookForm";
 import { Link } from "react-router-dom";
 import { PWData } from "../interface/Form";
+import Loading from "../components/Loading";
 
 interface Props {
   handleLogin: (PWData: PWData) => void;
+  loading: boolean;
 }
 type InputName = "email" | "password";
 type TLogin = Record<InputName, string>;
@@ -36,7 +38,7 @@ const loginFormInputs: Array<IReactHookFormInput<InputName>> = [
   },
 ];
 
-function LoginForm({ handleLogin }: Props) {
+function LoginForm({ handleLogin, loading }: Props) {
   const {
     register,
     handleSubmit,
@@ -80,11 +82,9 @@ function LoginForm({ handleLogin }: Props) {
           忘記密碼？
         </Link>
       </div>
-      <input
-        type="submit"
-        value="會員登入"
-        className="btn btn-light fw-bold w-100 mb-10"
-      />
+      <button type="submit" className="btn btn-light fw-bold w-100 mb-10">
+        {loading ? <Loading /> : "會員登入"}
+      </button>
     </form>
   );
 }

@@ -1,7 +1,9 @@
-// import react-hook-form
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IReactHookFormInput } from "../interface/ReactHookForm";
 import { apiGetUser, apiPutUser } from "../apis/userApis";
+import Loading from "../components/Loading";
+import useToastStore from "../store/ToastsStore";
 
 type InputName = "oldPassword" | "newPassword" | "checkNewPassword";
 type TUpdatePW = Record<InputName, string>;
@@ -69,7 +71,11 @@ function UpdatePWForm() {
     setError,
     reset,
   } = useForm<TUpdatePW>();
+
+  const toastStore = useToastStore((state) => state);
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (data: TUpdatePW) => {
+    setLoading(true);
     try {
       if (data.newPassword !== data.checkNewPassword) {
         setError("checkNewPassword", {
@@ -86,37 +92,55 @@ function UpdatePWForm() {
           oldPassword: data.oldPassword,
           newPassword: data.newPassword,
         };
-        console.log(submitData);
-        const res = await apiPutUser(submitData);
-        console.log(res);
+        await apiPutUser(submitData);
+        setLoading(false);
+        toastStore.setToastData({
+          show: true,
+          toastMessage: "密碼已更新",
+        });
       }
     } catch (err) {
-      console.log(err);
+      setLoading(false);
+      toastStore.setToastData({
+        show: true,
+        toastMessage: "密碼更新失敗",
+      });
     }
     reset();
   };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {resetPWFormInputs.map((input: IReactHookFormInput<InputName>) => {
-        return (
-          <div className="mb-3" key={input.name}>
-            <label className="form-label">{input.label}</label>
-            <input
-              type={input.type}
-              className="form-control"
-              placeholder={input.placeholder}
-              {...register(input.name, input.options)}
-            />
-            {errors[input.name] && (
-              <p className="text-danger" role="alert">
-                {errors[input.name]?.message}
-              </p>
-            )}
-          </div>
-        );
-      })}
-      <input type="submit" value="儲存設定" className="btn btn-secondary" />
-    </form>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {resetPWFormInputs.map((input: IReactHookFormInput<InputName>) => {
+          return (
+            <div className="mb-3" key={input.name}>
+              <label className="form-label">{input.label}</label>
+              <input
+                type={input.type}
+                className="form-control"
+                placeholder={input.placeholder}
+                {...register(input.name, input.options)}
+              />
+              {errors[input.name] && (
+                <p className="text-danger" role="alert">
+                  {errors[input.name]?.message}
+                </p>
+              )}
+            </div>
+          );
+        })}
+        {/* <input type="submit" value="儲存設定" className="btn btn-secondary" /> */}
+        <button
+          type="submit"
+          className="btn btn-secondary"
+          style={{ width: "128px" }}
+        >
+          {loading && <Loading />}
+          {!loading && "儲存設定"}
+        </button>
+      </form>
+    </>
   );
 }
 

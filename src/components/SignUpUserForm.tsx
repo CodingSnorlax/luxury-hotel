@@ -4,8 +4,11 @@ import { IReactHookFormInput } from "../interface/ReactHookForm";
 import { years, months, daysByDate } from "../units/time";
 import { countyList, cityListByCounty } from "../units/zipcodes";
 import { UserData } from "../interface/Form";
+import Loading from "./Loading";
+
 interface Props {
   handleComplete: (userData: UserData) => void;
+  loading: boolean;
 }
 type InputName =
   | "name"
@@ -29,6 +32,10 @@ const signUpUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
         value: true,
         message: "請輸入姓名",
       },
+      minLength: {
+        value: 2,
+        message: "姓名至少需 2 個字元",
+      },
     },
   },
   {
@@ -40,6 +47,10 @@ const signUpUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
       required: {
         value: true,
         message: "請輸入電話",
+      },
+      pattern: {
+        value: /^09\d{8}$/,
+        message: "電話格式錯誤",
       },
     },
   },
@@ -123,7 +134,7 @@ const signUpUserAddressInputs: Array<IReactHookFormInput<InputName>> = [
   },
 ];
 
-function SignUpUserForm({ handleComplete }: Props) {
+function SignUpUserForm({ handleComplete, loading }: Props) {
   const {
     register,
     handleSubmit,
@@ -296,12 +307,13 @@ function SignUpUserForm({ handleComplete }: Props) {
           我已閱讀並同意本網站個資使用規範
         </label>
       </div>
-      <input
+      <button
         type="submit"
-        value="完成註冊"
         className="btn btn-primary text-white fw-bold w-100 mb-4"
         disabled={!isRead}
-      />
+      >
+        {loading ? <Loading /> : "完成註冊"}
+      </button>
     </form>
   );
 }

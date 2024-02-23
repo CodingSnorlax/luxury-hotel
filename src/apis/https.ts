@@ -56,9 +56,14 @@ instance.interceptors.response.use(
   }
 );
 
-export default (method: string, url: string, data?: any, settings?: any) => {
+export default (
+  method: string,
+  url: string,
+  data?: object,
+  settings?: object
+) => {
   method = method.toLowerCase();
-  if (method === "get") return instance.get(url, data, settings);
+  if (method === "get") return instance.get(url, settings);
   else if (method === "post") return instance.post(url, data, settings);
   else if (method === "put") return instance.put(url, data, settings);
   else if (method === "patch") return instance.patch(url, data);

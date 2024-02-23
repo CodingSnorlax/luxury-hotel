@@ -16,5 +16,9 @@ export interface IReactHookFormInput<T extends string> {
       value: number;
       message: string;
     };
+    pattern?: {
+      value: RegExp;
+      message: string;
+    }
   };
 }

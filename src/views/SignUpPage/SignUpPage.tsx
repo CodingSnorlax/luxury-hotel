@@ -8,11 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { zipCodeByCountryAndCity } from "../../units/zipcodes";
 import { apiSignup } from "../../apis/userApis";
 import LoginBg from "../../assets/img/Login_BG.png";
+import useToastStore from "../../store/ToastsStore";
 
 interface Props {
   navbarHeight: number;
 }
 export const SignUpPage = ({ navbarHeight }: Props) => {
+  const [loading, setLoading] = useState(false);
+  const toastStore = useToastStore((state) => state);
+
   // 目前進度
   const [progressNum, setProgressNum] = useState(1);
 
@@ -38,11 +42,21 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
         detail: `${county}${city}${detail}`,
       },
     };
+    setLoading(true);
     try {
       await apiSignup(data);
+      setLoading(false);
+      toastStore.setToastData({
+        show: true,
+        toastMessage: "注冊成功，請重新登入",
+      });
       navigate("/login");
-    } catch (err) {
-      console.log(err)
+    } catch (err: any) {
+      setLoading(false);
+      toastStore.setToastData({
+        show: true,
+        toastMessage: err.response.data.message,
+      });
     }
   };
 
@@ -99,7 +113,10 @@ export const SignUpPage = ({ navbarHeight }: Props) => {
               />
             )}
             {progressNum === 2 && (
-              <SignUpUserForm handleComplete={handleComplete} />
+              <SignUpUserForm
+                handleComplete={handleComplete}
+                loading={loading}
+              />
             )}
             <p className="d-inline me-2">已經有會員了嗎？</p>
             <Link className="text-primary" to="/login">

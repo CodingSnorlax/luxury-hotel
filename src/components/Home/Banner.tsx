@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -41,7 +40,7 @@ const Banner = () => {
           <SwiperSlide key={index}>
             <img
               src={slide.imgSrc}
-              className="d-block w-100 h-100vh"
+              className="d-block w-100 h-100vh object-fit-cover"
               alt="img"
             />
             <div className="carousel-style position-absolute container-fluid container justify-content-between">

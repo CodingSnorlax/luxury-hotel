@@ -10,6 +10,8 @@ import {
 import { IUser } from "../interface/User";
 import { countyAndCityByZipCode } from "../units/zipcodes";
 import { apiGetUser, apiPutUser } from "../apis/userApis";
+import Loading from "../components/Loading";
+import useToastStore from "../store/ToastsStore";
 
 type InputName =
   | "name"
@@ -34,6 +36,10 @@ const updateUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
         value: true,
         message: "請輸入姓名",
       },
+      minLength: {
+        value: 2,
+        message: "姓名至少需 2 個字元",
+      },
     },
   },
   {
@@ -45,6 +51,10 @@ const updateUserBaseInfoFormInputs: Array<IReactHookFormInput<InputName>> = [
       required: {
         value: true,
         message: "請輸入電話",
+      },
+      pattern: {
+        value: /^09\d{8}$/,
+        message: "電話格式錯誤",
       },
     },
   },
@@ -152,8 +162,10 @@ const UpdateUserForm: React.FC = () => {
     setCounty(e.target.value);
   };
 
+  const toastStore = useToastStore((state) => state);
+  const [loading, setLoading] = useState(false);
   const onSubmit = (data: TUpdateUser) => {
-    console.log(data);
+    setLoading(true);
     const { name, phone, year, month, day, county, city, detail } = data;
     const birthday = `${year}-${month}-${day}`;
     const zipcode = zipCodeByCountryAndCity(county, city);
@@ -165,10 +177,18 @@ const UpdateUserForm: React.FC = () => {
         console.log(userInfo);
         const res = await apiPutUser(userInfo);
         if (res && res.status) {
-          console.log(res.data);
+          setLoading(false);
+          toastStore.setToastData({
+            show: true,
+            toastMessage: "基本資料已更新",
+          });
         }
       } catch (error) {
-        console.log(error);
+        setLoading(false);
+        toastStore.setToastData({
+          show: true,
+          toastMessage: "基本資料更新失敗",
+        });
       }
     };
     updateUser();
@@ -220,137 +240,146 @@ const UpdateUserForm: React.FC = () => {
   }, [updateUser, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {updateUserBaseInfoFormInputs.map(
-        (input: IReactHookFormInput<InputName>) => {
-          return (
-            <div key={input.name}>
-              <div className="mb-3">
-                <label className="form-label">{input.label}</label>
-                <input
-                  type={input.type}
-                  className="form-control"
-                  placeholder={input.placeholder}
-                  {...register(input.name, input.options)}
-                />
-                {errors[input.name] && (
-                  <p className="text-danger" role="alert">
-                    {errors[input.name]?.message as string}
-                  </p>
-                )}
-              </div>
-            </div>
-          );
-        }
-      )}
-      <div className="row align-items-end mb-3">
-        {updateUserBirthdayInputs.map(
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {updateUserBaseInfoFormInputs.map(
           (input: IReactHookFormInput<InputName>) => {
             return (
-              <div className="col" key={input.name}>
-                {input.type === "select" && (
-                  <div>
-                    <label className="form-label">{input.label}</label>
-                    <select
-                      className="form-select"
-                      {...register(input.name, input.options)}
-                    >
-                      {input.name === "year" && (
-                        <>
-                          {years.map((year) => (
-                            <option key={year.value} value={year.value}>
-                              {year.text}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                      {input.name === "month" && (
-                        <>
-                          {months.map((month) => (
-                            <option key={month.value} value={month.value}>
-                              {month.text}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                      {input.name === "day" && (
-                        <>
-                          {days.map((day) => (
-                            <option key={day.value} value={day.value}>
-                              {day.text}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                    </select>
-                  </div>
-                )}
+              <div key={input.name}>
+                <div className="mb-3">
+                  <label className="form-label">{input.label}</label>
+                  <input
+                    type={input.type}
+                    className="form-control"
+                    placeholder={input.placeholder}
+                    {...register(input.name, input.options)}
+                  />
+                  {errors[input.name] && (
+                    <p className="text-danger" role="alert">
+                      {errors[input.name]?.message as string}
+                    </p>
+                  )}
+                </div>
               </div>
             );
           }
         )}
-      </div>
-      <div className="row align-items-end mb-3">
-        {updateUserAddressInputs.map(
-          (input: IReactHookFormInput<InputName>) => {
-            return (
-              <div
-                className={input.type === "select" ? "col-6" : "col"}
-                key={input.name}
-              >
-                {input.type === "select" && (
-                  <div>
-                    <label className="form-label">{input.label}</label>
-                    <select
-                      className="form-select"
-                      {...register(input.name, input.options)}
-                      onChange={
-                        input.name === "county"
-                          ? (e) => handleCountyChange(e)
-                          : () => {}
-                      }
-                    >
-                      {/* // countyList option */}
-                      {input.name === "county" && (
-                        <>
-                          {countyList.map((county) => (
-                            <option key={county} value={county}>
-                              {county}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                      {/* // cityList option */}
-                      {input.name === "city" && (
-                        <>
-                          {cityListByCounty(county).map((city) => (
-                            <option key={city} value={city}>
-                              {city}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                    </select>
-                  </div>
-                )}
-                {input.type === "text" && (
-                  <div>
-                    <label className="form-label">{input.label}</label>
-                    <input
-                      type={input.type}
-                      className="form-control"
-                      placeholder={input.placeholder}
-                      {...register(input.name, input.options)}
-                    />
-                  </div>
-                )}
-              </div>
-            );
-          }
-        )}
-      </div>
-      <input type="submit" value="儲存設定" className="btn btn-secondary" />
-    </form>
+        <div className="row align-items-end mb-3">
+          {updateUserBirthdayInputs.map(
+            (input: IReactHookFormInput<InputName>) => {
+              return (
+                <div className="col" key={input.name}>
+                  {input.type === "select" && (
+                    <div>
+                      <label className="form-label">{input.label}</label>
+                      <select
+                        className="form-select"
+                        {...register(input.name, input.options)}
+                      >
+                        {input.name === "year" && (
+                          <>
+                            {years.map((year) => (
+                              <option key={year.value} value={year.value}>
+                                {year.text}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                        {input.name === "month" && (
+                          <>
+                            {months.map((month) => (
+                              <option key={month.value} value={month.value}>
+                                {month.text}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                        {input.name === "day" && (
+                          <>
+                            {days.map((day) => (
+                              <option key={day.value} value={day.value}>
+                                {day.text}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+          )}
+        </div>
+        <div className="row align-items-end mb-3">
+          {updateUserAddressInputs.map(
+            (input: IReactHookFormInput<InputName>) => {
+              return (
+                <div
+                  className={input.type === "select" ? "col-6" : "col"}
+                  key={input.name}
+                >
+                  {input.type === "select" && (
+                    <div>
+                      <label className="form-label">{input.label}</label>
+                      <select
+                        className="form-select"
+                        {...register(input.name, input.options)}
+                        onChange={
+                          input.name === "county"
+                            ? (e) => handleCountyChange(e)
+                            : () => {}
+                        }
+                      >
+                        {/* // countyList option */}
+                        {input.name === "county" && (
+                          <>
+                            {countyList.map((county) => (
+                              <option key={county} value={county}>
+                                {county}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                        {/* // cityList option */}
+                        {input.name === "city" && (
+                          <>
+                            {cityListByCounty(county).map((city) => (
+                              <option key={city} value={city}>
+                                {city}
+                              </option>
+                            ))}
+                          </>
+                        )}
+                      </select>
+                    </div>
+                  )}
+                  {input.type === "text" && (
+                    <div>
+                      <label className="form-label">{input.label}</label>
+                      <input
+                        type={input.type}
+                        className="form-control"
+                        placeholder={input.placeholder}
+                        {...register(input.name, input.options)}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            }
+          )}
+        </div>
+        <button
+          type="submit"
+          className="btn btn-secondary"
+          style={{ width: "128px" }}
+        >
+          {loading && <Loading />}
+          {!loading && "儲存設定"}
+        </button>
+      </form>
+    </>
   );
 };
 
